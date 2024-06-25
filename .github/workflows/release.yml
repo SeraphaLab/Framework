@@ -1,0 +1,52 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - '*' # Push events to matching *, i.e. 1.0, 20.15.10
+
+jobs:
+  release-note:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ env.VERSION }}
+      message: ${{ env.TAG_MESSAGE }}
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0 # Fetch all history for all tags and branches
+
+      - name: Get Release Notes
+        run: |
+          TAG_MESSAGE=$(git tag -l --format="%(contents:subject)" ${{ github.ref_name }})
+          echo "Release message: "$TAG_MESSAGE
+          echo "TAG_MESSAGE=$TAG_MESSAGE" >> $GITHUB_ENV
+
+      - name: Get update version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          echo "New version: $VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+  build:
+    needs: release-note
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ needs.release-note.outputs.version }}
+          name: ${{ needs.release-note.outputs.version }}
+          body: |
+            ${{ needs.release-note.outputs.message }}
+          draft: false
+          prerelease: false
+          omitDraftDuringUpdate: true

@@ -1,0 +1,44 @@
+{
+    "name": "serapha/framework",
+    "description": "Serapha Framework Core Library",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "carry0987"
+        }
+    ],
+    "require": {
+        "php": ">=8.1",
+        "carry0987/template-engine": "^1.0",
+        "carry0987/i18n": "^2.0",
+        "carry0987/sanite": "^1.1",
+        "carry0987/redis-tool": "^1.1",
+        "carry0987/utils": "^1.0",
+        "vlucas/phpdotenv": "^5.6",
+        "psr/container": "^2.0"
+    },
+    "config": {
+        "vendor-dir": "vendor",
+        "optimize-autoloader": true,
+        "classmap-authoritative": true
+    },
+    "autoload": {
+        "psr-4": {
+            "Serapha\\": "framework/"
+        }
+    },
+    "keywords": [
+        "framework",
+        "php",
+        "modular",
+        "template engine",
+        "sanite",
+        "i18n",
+        "multilingual",
+        "CRUD",
+        "MVC"
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
