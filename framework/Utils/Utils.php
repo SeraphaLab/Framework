@@ -1,5 +1,5 @@
 <?php
-namespace Serapha\Helper;
+namespace Serapha\Utils;
 
 use carry0987\Utils\Utils as BaseUtils;
 

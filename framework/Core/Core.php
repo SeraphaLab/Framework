@@ -4,7 +4,7 @@ namespace Serapha\Core;
 use Serapha\Template\Template;
 use Serapha\Routing\Router;
 use Serapha\Middleware\GlobalMiddleware;
-use Serapha\Helper\Utils;
+use Serapha\Utils\Utils;
 use carry0987\Sanite\Sanite;
 use carry0987\I18n\I18n;
 use carry0987\Redis\RedisTool;
