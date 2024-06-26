@@ -2,15 +2,13 @@
 namespace Serapha\Service;
 
 use Serapha\Database\DB;
-use carry0987\Sanite\Sanite;
 
 abstract class Service
 {
     protected DB $db;
 
-    public function __construct()
+    public function __construct(DB $db)
     {
-        $sanite = ServiceDispatcher::resolve(Sanite::class);
-        $this->db = new DB($sanite);
+        $this->db = $db;
     }
 }
