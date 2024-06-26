@@ -50,3 +50,15 @@ jobs:
           draft: false
           prerelease: false
           omitDraftDuringUpdate: true
+
+  update-packagist:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Trigger Packagist update
+        uses: hotaruma/packagist-sync@v1.0.1
+        with:
+          api-token: ${{ secrets.PACKAGIST_TOKEN }}
