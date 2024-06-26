@@ -8,10 +8,10 @@ use Serapha\Middleware\MiddlewareInterface;
 class Router
 {
     private Container $container;
-    /**
-     * @var MiddlewareInterface[]
-     */
+    /** @var MiddlewareInterface[] */
     private array $middleware = [];
+    private string $prefix = '';
+    private array $groupStack = [];
 
     public function __construct(Container $container)
     {
@@ -21,6 +21,7 @@ class Router
 
     public function addRoute(string $method, string $uri, string $controller): void
     {
+        $uri = $this->prefix . $uri;
         Route::add($method, $uri, $controller);
     }
 
@@ -45,6 +46,15 @@ class Router
             Route::dispatch($this->container);
             return $response;
         });
+    }
+
+    public function group(array $attributes, callable $callback): void
+    {
+        $this->updateGroupAttributes($attributes);
+
+        call_user_func($callback, $this);
+
+        $this->restoreGroupAttributes();
     }
 
     public function runMiddleware(MiddlewareInterface $middleware, ?Request $request = null, ?Response $response = null, ?callable $next = null): Response
@@ -84,5 +94,41 @@ class Router
         };
 
         return $nextMiddleware($request, $response);
+    }
+
+    private function updateGroupAttributes(array $attributes): void
+    {
+        if (isset($attributes['prefix'])) {
+            $prefix = trim($attributes['prefix'], '/');
+            $this->prefix .= '/' . $prefix;
+        }
+
+        if (isset($attributes['middleware'])) {
+            foreach ($attributes['middleware'] as $middleware) {
+                $this->addMiddleware($middleware);
+            }
+        }
+
+        $this->groupStack[] = $attributes;
+    }
+
+    private function restoreGroupAttributes(): void
+    {
+        array_pop($this->groupStack);
+
+        $this->prefix = '';
+        $this->middleware = [];
+
+        foreach ($this->groupStack as $group) {
+            if (isset($group['prefix'])) {
+                $this->prefix .= '/' . trim($group['prefix'], '/');
+            }
+
+            if (isset($group['middleware'])) {
+                foreach ($group['middleware'] as $middleware) {
+                    $this->addMiddleware($middleware);
+                }
+            }
+        }
     }
 }
