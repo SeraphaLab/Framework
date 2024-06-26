@@ -5,17 +5,17 @@ use carry0987\Sanite\Sanite;
 
 class DB
 {
-    private Sanite $sanite;
+    private \PDO $dbConnection;
 
-    public function __construct(Sanite $sanite)
+    public function __construct(Sanite|\PDO $dbConnection)
     {
-        $this->sanite = $sanite;
+        $this->dbConnection = $dbConnection instanceof Sanite ? $dbConnection->getConnection() : $dbConnection;
     }
 
     // Create Operations
     public function create(string $query, string $bindTypes, array $data)
     {
-        $dataCreate = new DataCreate($this->sanite);
+        $dataCreate = new DataCreate($this->dbConnection);
 
         return $dataCreate->createSingle(['query' => $query, 'bind' => $bindTypes], $data);
     }
@@ -23,7 +23,7 @@ class DB
     // Read Operations
     public function read(string $query, string $bindTypes, array $conditions = [])
     {
-        $dataRead = new DataRead($this->sanite);
+        $dataRead = new DataRead($this->dbConnection);
 
         return $dataRead->readSingle(['query' => $query, 'bind' => $bindTypes], $conditions);
     }
@@ -31,7 +31,7 @@ class DB
     // Update Operations
     public function update(string $query, string $bindTypes, array $data)
     {
-        $dataUpdate = new DataUpdate($this->sanite);
+        $dataUpdate = new DataUpdate($this->dbConnection);
 
         return $dataUpdate->updateSingle(['query' => $query, 'bind' => $bindTypes], $data);
     }
@@ -39,7 +39,7 @@ class DB
     // Delete Operations
     public function delete(string $query, string $bindTypes, array $conditions)
     {
-        $dataDelete = new DataDelete($this->sanite);
+        $dataDelete = new DataDelete($this->dbConnection);
 
         return $dataDelete->deleteSingle(['query' => $query, 'bind' => $bindTypes], $conditions);
     }
