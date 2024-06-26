@@ -2,6 +2,7 @@
 namespace Serapha\Core;
 
 use Serapha\Service\ServiceLocator;
+use Serapha\Model\ModelLocator;
 use Serapha\Template\Template;
 use Serapha\Routing\Router;
 use Serapha\Middleware\GlobalMiddleware;
@@ -43,8 +44,9 @@ class Core
         ]));
         $this->container->singleton(Router::class, fn($container) => new Router($container));
 
-        // Register the container in the ServiceLocator
+        // Register the container for loactor
         ServiceLocator::setContainer($this->container);
+        ModelLocator::setContainer($this->container);
     }
 
     /**
