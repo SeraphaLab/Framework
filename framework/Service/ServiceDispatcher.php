@@ -7,14 +7,16 @@ use Serapha\Core\Dispatcher;
 class ServiceDispatcher
 {
     protected Dispatcher $dispatcher;
+    private static Container $container;
 
     public function __construct(Container $container)
     {
         $this->dispatcher = new Dispatcher($container);
+        self::$container = $container;
     }
 
-    public function resolve(string $service)
+    public static function resolve(string $service)
     {
-        return $this->dispatcher->resolve($service);
+        return self::$container->get($service);
     }
 }

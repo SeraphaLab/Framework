@@ -2,7 +2,6 @@
 namespace Serapha\Routing;
 
 use Serapha\Core\Container;
-use Serapha\Service\ServiceDispatcher;
 use Serapha\Controller\ControllerDispatcher;
 use Serapha\Middleware\MiddlewareInterface;
 
@@ -18,7 +17,6 @@ class Router
     {
         $this->container = $container;
         Route::setControllerDispatcher(new ControllerDispatcher($this->container));
-        Route::setServiceDispatcher(new ServiceDispatcher($this->container));
     }
 
     public function addRoute(string $method, string $uri, string $controller): void

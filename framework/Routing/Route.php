@@ -4,23 +4,16 @@ namespace Serapha\Routing;
 use carry0987\I18n\I18n;
 use Serapha\Core\Container;
 use Serapha\Controller\ControllerDispatcher;
-use Serapha\Service\ServiceDispatcher;
 use Exception;
 
 class Route
 {
     private static array $routes = [];
     private static ControllerDispatcher $controllerDispatcher;
-    private static ServiceDispatcher $serviceDispatcher;
 
     public static function setControllerDispatcher(ControllerDispatcher $controllerDispatcher): void
     {
         self::$controllerDispatcher = $controllerDispatcher;
-    }
-
-    public static function setServiceDispatcher(ServiceDispatcher $serviceDispatcher): void
-    {
-        self::$serviceDispatcher = $serviceDispatcher;
     }
 
     public static function add(string $method, string $uri, string $controller): void
@@ -63,15 +56,6 @@ class Route
         }
 
         self::$controllerDispatcher->dispatch($controllerName, $action, $params);
-    }
-
-    private static function invokeService(string $service, array $params): void
-    {
-        if (!class_exists($service)) {
-            throw new Exception("Service [$service] not found");
-        }
-
-        self::$serviceDispatcher->resolve($service);
     }
 
     private static function notFound(I18n $i18n): void

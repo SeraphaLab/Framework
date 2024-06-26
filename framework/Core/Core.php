@@ -1,6 +1,7 @@
 <?php
 namespace Serapha\Core;
 
+use Serapha\Service\ServiceDispatcher;
 use Serapha\Template\Template;
 use Serapha\Routing\Router;
 use Serapha\Middleware\GlobalMiddleware;
@@ -41,6 +42,9 @@ class Core
             'useAutoDetect' => true
         ]));
         $this->container->singleton(Router::class, fn($container) => new Router($container));
+
+        // Register ServiceDispatcher
+        $this->container->singleton(ServiceDispatcher::class, fn($container) => new ServiceDispatcher($container));
     }
 
     /**
