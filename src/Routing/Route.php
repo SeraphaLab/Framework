@@ -16,7 +16,7 @@ final class Route
         self::$controllerDispatcher = $controllerDispatcher;
     }
 
-    public static function add(string $method, string $uri, string $controller): void
+    public static function add(string $method, string $uri, string|array $controller): void
     {
         self::$routes[$method][$uri] = $controller;
     }
@@ -45,11 +45,28 @@ final class Route
         self::notFound($container->get(I18n::class));
     }
 
-    private static function invokeController(string $controller, array $params): void
+    private static function parseController($controller): array
     {
-        $parts = explode('@', $controller);
-        $controllerName = 'App\\Controller\\' . $parts[0];
-        $action = $parts[1] ?? 'index';
+        if (is_string($controller)) {
+            $parts = explode('@', $controller);
+            $controllerName = 'App\\Controller\\' . $parts[0];
+            if (!class_exists($controllerName)) {
+                $controllerName = $controller;
+            }
+            $action = $parts[1] ?? 'index';
+        } elseif (is_array($controller)) {
+            $controllerName = $controller[0];
+            $action = $controller[1] ?? 'index';
+        } else {
+            throw new Exception("Invalid controller definition");
+        }
+
+        return [$controllerName, $action];
+    }
+
+    private static function invokeController(string|array $controller, array $params): void
+    {
+        [$controllerName, $action] = self::parseController($controller);
 
         if (!class_exists($controllerName)) {
             throw new Exception("Controller [$controllerName] not found");

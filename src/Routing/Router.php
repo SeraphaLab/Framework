@@ -13,13 +13,38 @@ final class Router
     private string $prefix = '';
     private array $groupStack = [];
 
+    const GET = 'GET';
+    const POST = 'POST';
+    const PUT = 'PUT';
+    const DELETE = 'DELETE';
+
     public function __construct(Container $container)
     {
         $this->container = $container;
         Route::setControllerDispatcher(new ControllerDispatcher($this->container));
     }
 
-    public function addRoute(string $method, string $uri, string $controller): void
+    public function get(string $uri, string|array $action): void
+    {
+        $this->addRoute(self::GET, $uri, $action);
+    }
+
+    public function post(string $uri, string|array $action): void
+    {
+        $this->addRoute(self::POST, $uri, $action);
+    }
+
+    public function put(string $uri, string|array $action): void
+    {
+        $this->addRoute(self::PUT, $uri, $action);
+    }
+
+    public function delete(string $uri, string|array $action): void
+    {
+        $this->addRoute(self::DELETE, $uri, $action);
+    }
+
+    public function addRoute(string $method, string $uri, string|array $controller): void
     {
         $uri = $this->prefix . $uri;
         Route::add($method, $uri, $controller);
