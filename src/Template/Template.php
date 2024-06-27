@@ -30,9 +30,8 @@ final class Template
     /**
      * Set data for the template engine.
      * @param array|string $data
-     * @return void
      */
-    public function setData(string|array $data, mixed $value = null): void
+    public function setData(string|array $data, mixed $value = null): self
     {
         if (is_array($data)) {
             $this->data = array_merge($data, $this->data);
@@ -40,6 +39,8 @@ final class Template
         }
 
         $this->data[$data] = $value;
+
+        return $this;
     }
 
     /**
@@ -61,6 +62,8 @@ final class Template
      */
     public function render(array $templates, array $data = []): void
     {
+        $data = $this->setData($data)->getData();
+
         foreach ($templates as $template) {
             $filepath = $this->template->loadTemplate($template);
             if (file_exists($filepath)) {
