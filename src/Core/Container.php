@@ -4,6 +4,7 @@ namespace Serapha\Core;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionParameter;
+use ReflectionUnionType;
 use Exception;
 
 final class Container implements ContainerInterface
@@ -77,9 +78,21 @@ final class Container implements ContainerInterface
 
         $parameters = $constructor->getParameters();
         $dependencies = array_map(function(ReflectionParameter $param) {
-            if ($param->getType() && !$param->getType()->isBuiltin()) {
-                return $this->resolve($param->getType()->getName());
+            $paramType = $param->getType();
+            if ($paramType) {
+                // Check if the parameter type is a UnionType
+                if ($paramType instanceof ReflectionUnionType) {
+                    // Loop through each type in the UnionType
+                    foreach ($paramType->getTypes() as $unionedType) {
+                        if (!$unionedType->isBuiltin()) {
+                            return $this->resolve($unionedType->getName());
+                        }
+                    }
+                } elseif (!$paramType->isBuiltin()) {
+                    return $this->resolve($paramType->getName());
+                }
             }
+
             if ($param->isDefaultValueAvailable()) {
                 return $param->getDefaultValue();
             }
