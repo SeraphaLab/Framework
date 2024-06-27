@@ -8,9 +8,10 @@ use carry0987\Template\Template as TemplateEngine;
 use carry0987\Template\Controller\DBController;
 use carry0987\Template\Controller\RedisController;
 
-class Template
+final class Template
 {
     private TemplateEngine $template;
+    private array $data = [];
 
     public function __construct(Container $container)
     {
@@ -24,6 +25,31 @@ class Template
         // Set Redis for template engine
         $redis = new RedisController($container->get(RedisTool::class));
         $this->template->setRedis($redis);
+    }
+
+    /**
+     * Set data for the template engine.
+     * @param array|string $data
+     * @return void
+     */
+    public function setData(string|array $data, mixed $value = null): void
+    {
+        if (is_array($data)) {
+            $this->data = array_merge($data, $this->data);
+            return;
+        }
+
+        $this->data[$data] = $value;
+    }
+
+    /**
+     * Get data from the template engine.
+     * @param string $key
+     * @return mixed
+     */
+    public function getData(?string $key = null): mixed
+    {
+        return $key ? $this->data[$key] : $this->data;
     }
 
     /**
