@@ -1,7 +1,7 @@
 <?php
 namespace Serapha\Routing;
 
-class Request
+final class Request
 {
     private array $params;
 

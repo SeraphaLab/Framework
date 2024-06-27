@@ -1,7 +1,7 @@
 <?php
 namespace Serapha\Core;
 
-class Config
+final class Config
 {
     private array $config;
 

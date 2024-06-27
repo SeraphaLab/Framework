@@ -3,7 +3,7 @@ namespace Serapha\Core;
 
 use Dotenv\Dotenv;
 
-class Bootstrap
+final class Bootstrap
 {
     public static function init(string $envPath): void
     {

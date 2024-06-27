@@ -4,7 +4,7 @@ namespace Serapha\Service;
 use Serapha\Core\Container;
 use Serapha\Core\Dispatcher;
 
-class ServiceLocator
+final class ServiceLocator
 {
     protected static Container $container;
 

@@ -3,7 +3,7 @@ namespace Serapha\Routing;
 
 use carry0987\Utils\Utils;
 
-class Response
+final class Response
 {
     private int $status = 200;
     private string $body = '';

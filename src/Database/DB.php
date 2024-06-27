@@ -3,7 +3,7 @@ namespace Serapha\Database;
 
 use carry0987\Sanite\Sanite;
 
-class DB
+final class DB
 {
     private \PDO $dbConnection;
 

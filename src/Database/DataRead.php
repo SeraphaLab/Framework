@@ -3,7 +3,7 @@ namespace Serapha\Database;
 
 use carry0987\Sanite\Models\DataReadModel;
 
-class DataRead extends DataReadModel
+final class DataRead extends DataReadModel
 {
     public function readSingle(array $queryArray, ?array $dataArray = null)
     {

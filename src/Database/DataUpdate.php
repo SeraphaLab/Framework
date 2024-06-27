@@ -3,7 +3,7 @@ namespace Serapha\Database;
 
 use carry0987\Sanite\Models\DataUpdateModel;
 
-class DataUpdate extends DataUpdateModel
+final class DataUpdate extends DataUpdateModel
 {
     public function updateSingle(array $queryArray, array $dataArray)
     {

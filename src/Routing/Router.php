@@ -5,7 +5,7 @@ use Serapha\Core\Container;
 use Serapha\Controller\ControllerDispatcher;
 use Serapha\Middleware\MiddlewareInterface;
 
-class Router
+final class Router
 {
     private Container $container;
     /** @var MiddlewareInterface[] */

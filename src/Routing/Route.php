@@ -6,7 +6,7 @@ use Serapha\Core\Container;
 use Serapha\Controller\ControllerDispatcher;
 use Exception;
 
-class Route
+final class Route
 {
     private static array $routes = [];
     private static ControllerDispatcher $controllerDispatcher;

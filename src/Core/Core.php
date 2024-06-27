@@ -11,7 +11,7 @@ use carry0987\Sanite\Sanite;
 use carry0987\I18n\I18n;
 use carry0987\Redis\RedisTool;
 
-class Core
+final class Core
 {
     private Container $container;
 

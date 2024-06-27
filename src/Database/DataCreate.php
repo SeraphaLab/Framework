@@ -3,7 +3,7 @@ namespace Serapha\Database;
 
 use carry0987\Sanite\Models\DataCreateModel;
 
-class DataCreate extends DataCreateModel
+final class DataCreate extends DataCreateModel
 {
     public function createSingle(array $queryArray, array $dataArray, bool $getAutoIncrement = false)
     {

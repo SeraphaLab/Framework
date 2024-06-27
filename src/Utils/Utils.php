@@ -3,7 +3,7 @@ namespace Serapha\Utils;
 
 use carry0987\Utils\Utils as BaseUtils;
 
-class Utils extends BaseUtils
+final class Utils extends BaseUtils
 {
     /**
      * Generate a random string.

@@ -4,7 +4,7 @@ namespace Serapha\Core;
 use ReflectionClass;
 use Exception;
 
-class Dispatcher
+final class Dispatcher
 {
     protected Container $container;
 

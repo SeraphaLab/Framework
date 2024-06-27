@@ -6,7 +6,7 @@ use ReflectionClass;
 use ReflectionParameter;
 use Exception;
 
-class Container implements ContainerInterface
+final class Container implements ContainerInterface
 {
     private array $bindings = [];
     private array $instances = [];

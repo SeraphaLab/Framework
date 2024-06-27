@@ -4,7 +4,7 @@ namespace Serapha\Controller;
 use Serapha\Core\Container;
 use Serapha\Core\Dispatcher;
 
-class ControllerDispatcher
+final class ControllerDispatcher
 {
     protected Dispatcher $dispatcher;
 

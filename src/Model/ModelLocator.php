@@ -4,7 +4,7 @@ namespace Serapha\Model;
 use Serapha\Core\Container;
 use Serapha\Core\Dispatcher;
 
-class ModelLocator
+final class ModelLocator
 {
     protected static Container $container;
 
