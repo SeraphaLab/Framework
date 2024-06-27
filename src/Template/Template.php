@@ -35,7 +35,7 @@ final class Template
     {
         if (is_array($data)) {
             $this->data = array_merge($data, $this->data);
-            return;
+            return $this;
         }
 
         $this->data[$data] = $value;
