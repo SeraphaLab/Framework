@@ -67,10 +67,13 @@ final class Router
         $request = new Request(['query' => $query]);
         $response = new Response();
 
-        $this->callMiddlewareStack($request, $response, function ($request, $response) {
+        // Call the middleware stack, passing the final route dispatching as the last callable
+        $finalHandler = function($request, $response) {
             Route::dispatch($this->container);
             return $response;
-        });
+        };
+
+        $this->callMiddleware($request, $response, $finalHandler);
     }
 
     public function group(array $attributes, callable $callback): void
