@@ -5,7 +5,6 @@ use Serapha\Service\ServiceLocator;
 use Serapha\Model\ModelLocator;
 use Serapha\Template\Template;
 use Serapha\Routing\Router;
-use Serapha\Middleware\GlobalMiddleware;
 use Serapha\Utils\Utils;
 use carry0987\Sanite\Sanite;
 use carry0987\I18n\I18n;
@@ -59,10 +58,6 @@ final class Core
     {
         // Get the router instance and dispatch the query
         $router = $this->container->get(Router::class);
-        // Register necessary services in the container
-        $this->container->bind(GlobalMiddleware::class, fn() => new GlobalMiddleware());
-        // Register global-level middleware
-        $router->addMiddleware($this->container->get(GlobalMiddleware::class));
         // Dispatch the query
         $router->dispatch($query);
     }

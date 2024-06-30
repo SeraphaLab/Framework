@@ -3,12 +3,12 @@ namespace Serapha\Routing;
 
 use Serapha\Core\Container;
 use Serapha\Controller\ControllerDispatcher;
-use Serapha\Middleware\MiddlewareInterface;
+use Serapha\Middleware\Middleware;
 
 final class Router
 {
     private Container $container;
-    /** @var MiddlewareInterface[] */
+    /** @var Middleware[] */
     private array $middleware = [];
     private string $prefix = '';
     private array $groupStack = [];
@@ -50,7 +50,7 @@ final class Router
         Route::add($method, $uri, $controller);
     }
 
-    public function addMiddleware(MiddlewareInterface $middleware): self
+    public function addMiddleware(Middleware $middleware): self
     {
         $this->middleware[] = $middleware;
 
@@ -85,15 +85,15 @@ final class Router
         $this->restoreGroupAttributes();
     }
 
-    public function runMiddleware(MiddlewareInterface $middleware, ?Request $request = null, ?Response $response = null, ?callable $next = null): Response
+    public function runMiddleware(Middleware $middleware, ?Request $request = null, ?Response $response = null, ?callable $next = null): Response
     {
         $request = $request ?? new Request();
         $response = $response ?? new Response();
-        $next = $next ?? function ($request, $response) {
+        $next = new Handler(function ($request, $response) {
             return $response;
-        };
+        });
 
-        return $middleware->handle($request, $response, $next);
+        return $middleware->process($request, $response, $next);
     }
 
     public function callMiddleware(?Request $request = null, ?Response $response = null, ?callable $last = null): Response
@@ -118,7 +118,7 @@ final class Router
 
             $currentMiddleware = array_shift($middlewareStack);
 
-            return $currentMiddleware->handle($request, $response, $nextMiddleware);
+            return $currentMiddleware->process($request, $response, $nextMiddleware);
         };
 
         return $nextMiddleware($request, $response);

@@ -1,65 +1,112 @@
 <?php
 namespace Serapha\Routing;
 
-use carry0987\Utils\Utils;
+use HttpSoft\Message\Response as BaseResponse;
+use Psr\Http\Message\MessageInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
+use Serapha\Utils\Utils;
 
-final class Response
+class Response implements ResponseInterface
 {
-    private int $status = 200;
-    private string $body = '';
+    private BaseResponse $response;
 
-    /**
-     * Set the HTTP status code.
-     *
-     * @param int $status
-     * @return self
-     */
-    public function setStatus(int $status) : self
+    public function __construct(int $status = 200, array $headers = [], $body = null, string $version = '1.1', string $reason = '')
     {
-        $this->status = $status;
-        if (headers_sent()) {
-            return $this;
-        }
-        http_response_code($this->status);
-
-        return $this;
+        $this->response = new BaseResponse($status, $headers, $body, $version, $reason);
     }
 
-    /**
-     * Add a header to the response.
-     *
-     * @param string $name
-     * @param string $value
-     * @return self
-     */
-    public function addHeader(string $name, string $value): self
+    public function createResponse(int $code = 200, string $reasonPhrase = ''): self
     {
-        Utils::setHeader([$name => $value]);
-
-        return $this;
+        return new self($code, [], null, '1.1', $reasonPhrase);
     }
 
-    /**
-     * Set the body of the response.
-     *
-     * @param string $body
-     * @return self
-     */
-    public function setBody(string $body): self
+    public function getProtocolVersion(): string
     {
-        $this->body = $body;
-
-        return $this;
+        return $this->response->getProtocolVersion();
     }
 
-    /**
-     * Send the response.
-     *
-     * @return void
-     */
-    public function send(): void
+    public function withProtocolVersion(string $version): MessageInterface
     {
-        echo $this->body;
+        $newInstance = clone $this;
+        $newInstance->response = $this->response->withProtocolVersion($version);
+
+        return $newInstance;
+    }
+
+    public function getHeaders(): array
+    {
+        return $this->response->getHeaders();
+    }
+
+    public function hasHeader(string $name): bool
+    {
+        return $this->response->hasHeader($name);
+    }
+
+    public function getHeader(string $name): array
+    {
+        return $this->response->getHeader($name);
+    }
+
+    public function getHeaderLine(string $name): string
+    {
+        return $this->response->getHeaderLine($name);
+    }
+
+    public function withHeader(string $name, $value): MessageInterface
+    {
+        $newInstance = clone $this;
+        $newInstance->response = $this->response->withHeader($name, $value);
+
+        return $newInstance;
+    }
+
+    public function withAddedHeader(string $name, $value): MessageInterface
+    {
+        $newInstance = clone $this;
+        $newInstance->response = $this->response->withAddedHeader($name, $value);
+
+        return $newInstance;
+    }
+
+    public function withoutHeader(string $name): MessageInterface
+    {
+        $newInstance = clone $this;
+        $newInstance->response = $this->response->withoutHeader($name);
+
+        return $newInstance;
+    }
+
+    public function getBody(): StreamInterface
+    {
+        return $this->response->getBody();
+    }
+
+    public function withBody(StreamInterface $body): MessageInterface
+    {
+        $newInstance = clone $this;
+        $newInstance->response = $this->response->withBody($body);
+
+        return $newInstance;
+    }
+
+    public function getStatusCode(): int
+    {
+        return $this->response->getStatusCode();
+    }
+
+    public function getReasonPhrase(): string
+    {
+        return $this->response->getReasonPhrase();
+    }
+
+    public function withStatus(int $code, string $reasonPhrase = ''): self
+    {
+        $newInstance = clone $this;
+        $newInstance->response = $this->response->withStatus($code, $reasonPhrase);
+
+        return $newInstance;
     }
 
     /**
@@ -69,7 +116,7 @@ final class Response
      * @param int $status
      * @return void
      */
-    public function redirect(string $url, ?int $status = null): void
+    public function redirect(string $url, ?int $status = 302): void
     {
         // Construct the query parameter part
         $queryUrl = '?query=/' . $url;
@@ -78,6 +125,6 @@ final class Response
         // Construct the full URL with the query parameter
         $redirectUrl = Utils::trimPath($baseDir . '/' . $queryUrl);
         // Perform the redirection
-        Utils::redirectURL($redirectUrl, $status ?? 303);
+        Utils::redirectURL($redirectUrl, $status);
     }
 }
