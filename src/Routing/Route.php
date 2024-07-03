@@ -45,6 +45,22 @@ final class Route
         self::notFound($container->get(I18n::class));
     }
 
+    public static function getRouteInfo(string $method, string $uri): ?array
+    {
+        if (isset(self::$routes[$method])) {
+            foreach (self::$routes[$method] as $routeUri => $routeInfo) {
+                $pattern = preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9_]+)', $routeUri);
+                $pattern = "#^{$pattern}$#";
+    
+                if (preg_match($pattern, $uri, $matches)) {
+                    return $routeInfo;
+                }
+            }
+        }
+
+        return null;
+    }
+
     private static function parseController($controller): array
     {
         if (is_string($controller)) {
