@@ -57,9 +57,10 @@ final class Core
     public function run(string $query = '/'): void
     {
         // Get the router instance and dispatch the query
+        /** @var Router */
         $router = $this->container->get(Router::class);
         // Dispatch the query
-        $router->dispatch($query);
+        $router->handleRequest($query);
     }
 
     /**

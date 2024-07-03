@@ -58,6 +58,11 @@ final class Router
         Route::group($callback);
     }
 
+    public function handleRequest(): void
+    {
+        Route::dispatch($this->container);
+    }
+
     private function loadRoutes(string $routePath): void
     {
         $routeFiles = glob($routePath);
