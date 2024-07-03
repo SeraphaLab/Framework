@@ -10,15 +10,72 @@ final class Route
 {
     private static array $routes = [];
     private static ControllerDispatcher $controllerDispatcher;
+    private static array $currentGroupAttributes = [
+        'prefix' => '',
+        'middleware' => []
+    ];
 
     public static function setControllerDispatcher(ControllerDispatcher $controllerDispatcher): void
     {
         self::$controllerDispatcher = $controllerDispatcher;
     }
 
-    public static function add(string $method, string $uri, string|array $controller): void
+    public static function middleware(array|string $middleware): self
     {
-        self::$routes[$method][$uri] = $controller;
+        self::$currentGroupAttributes['middleware'] = array_merge(
+            self::$currentGroupAttributes['middleware'],
+            (array) $middleware
+        );
+
+        return new self;
+    }
+
+    public static function prefix(string $prefix): self
+    {
+        self::$currentGroupAttributes['prefix'] = trim($prefix, '/');
+
+        return new self;
+    }
+
+    public function group(callable $callback): void
+    {
+        // Save previous state
+        $previousGroupAttributes = self::$currentGroupAttributes;
+
+        $callback();
+
+        // Reset to previous state
+        self::$currentGroupAttributes = $previousGroupAttributes;
+    }
+
+    public static function add(string $method, string $uri, string|array|callable $controller): void
+    {
+        $uri = '/' . trim(self::$currentGroupAttributes['prefix'] . '/' . trim($uri, '/'), '/');
+        self::$routes[$method][$uri] = [
+            'controller' => $controller,
+            'middleware' => self::$currentGroupAttributes['middleware'],
+        ];
+    }
+
+    public static function get(string $uri, string|array|callable $controller): void
+    {
+        self::add('GET', $uri, $controller);
+    }
+
+    // Add similar methods for POST, PUT, DELETE
+    public static function post(string $uri, string|array|callable $controller): void
+    {
+        self::add('POST', $uri, $controller);
+    }
+
+    public static function put(string $uri, string|array|callable $controller): void
+    {
+        self::add('PUT', $uri, $controller);
+    }
+
+    public static function delete(string $uri, string|array|callable $controller): void
+    {
+        self::add('DELETE', $uri, $controller);
     }
 
     public static function dispatch(Container $container): void
@@ -26,23 +83,34 @@ final class Route
         // Get query parameter from request
         $query = $_GET['query'] ?? '/';
         $query = empty($query) ? '/' : $query;
-
         $method = $_SERVER['REQUEST_METHOD'];
 
-        // Find matched route
-        foreach (self::$routes[$method] as $routeUri => $controller) {
-            $pattern = preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9_]+)', $routeUri);
-            $pattern = "#^{$pattern}$#";
+        // Get route information
+        $routeInfo = self::getRouteInfo($method, $query);
 
-            if (preg_match($pattern, $query, $matches)) {
-                array_shift($matches); // Remove full match
-                self::invokeController($controller, $matches);
-                return;
+        if ($routeInfo) {
+            $controller = $routeInfo['controller'];
+            $middleware = $routeInfo['middleware'];
+            $params = $routeInfo['params'];
+
+            // Process middleware
+            $request = new Request();
+            $response = new Response();
+
+            foreach ($middleware as $mwClass) {
+                $middlewareInstance = $container->get($mwClass);
+                $response = $middlewareInstance->process($request, $response, new Handler(function($req) use($controller, $params) {
+                    self::invokeController($controller, $params);
+                    return new Response();
+                }));
             }
-        }
 
-        // Route not found
-        self::notFound($container->get(I18n::class));
+            // Invoke controller
+            self::invokeController($controller, $params);
+        } else {
+            // Route not found
+            self::notFound($container->get(I18n::class));
+        }
     }
 
     public static function getRouteInfo(string $method, string $uri): ?array
@@ -51,9 +119,14 @@ final class Route
             foreach (self::$routes[$method] as $routeUri => $routeInfo) {
                 $pattern = preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9_]+)', $routeUri);
                 $pattern = "#^{$pattern}$#";
-    
+
                 if (preg_match($pattern, $uri, $matches)) {
-                    return $routeInfo;
+                    array_shift($matches); // Remove full match
+                    return [
+                        'controller' => $routeInfo['controller'],
+                        'middleware' => $routeInfo['middleware'],
+                        'params' => $matches
+                    ];
                 }
             }
         }
