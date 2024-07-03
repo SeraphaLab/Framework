@@ -43,7 +43,7 @@ final class Route
         return new self;
     }
 
-    public function group(callable $callback): void
+    public static function group(callable $callback): void
     {
         // Save previous state
         $previousGroupAttributes = self::$currentGroupAttributes;
