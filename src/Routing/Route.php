@@ -8,8 +8,8 @@ use Exception;
 
 final class Route
 {
-    private static array $routes = [];
     private static ControllerDispatcher $controllerDispatcher;
+    private static array $routes = [];
     private static array $currentGroupAttributes = [
         'prefix' => '',
         'middleware' => []
