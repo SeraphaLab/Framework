@@ -45,7 +45,7 @@ final class Router
         return Route::prefix($prefix);
     }
 
-    public function group(array $attributes, callable $callback): void
+    public function group(array $attributes, \Closure $callback): void
     {
         if (isset($attributes['prefix'])) {
             $this->prefix($attributes['prefix']);
