@@ -128,9 +128,12 @@ final class Route
             'controller' => $controller,
             'middleware' => self::$currentGroupAttributes['middleware'],
         ];
+
+        // Reset middleware after adding route
+        self::$currentGroupAttributes['middleware'] = [];
     }
 
-    private static function parseController($controller): array
+    private static function parseController(string|array $controller): array
     {
         if (is_string($controller)) {
             $parts = explode('@', $controller);
