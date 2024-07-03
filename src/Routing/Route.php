@@ -15,6 +15,12 @@ final class Route
         'middleware' => []
     ];
 
+    // Define HTTP methods as constants
+    const GET = 'GET';
+    const POST = 'POST';
+    const PUT = 'PUT';
+    const DELETE = 'DELETE';
+
     public static function setControllerDispatcher(ControllerDispatcher $controllerDispatcher): void
     {
         self::$controllerDispatcher = $controllerDispatcher;
@@ -59,23 +65,23 @@ final class Route
 
     public static function get(string $uri, string|array|callable $controller): void
     {
-        self::add('GET', $uri, $controller);
+        self::add(self::GET, $uri, $controller);
     }
 
     // Add similar methods for POST, PUT, DELETE
     public static function post(string $uri, string|array|callable $controller): void
     {
-        self::add('POST', $uri, $controller);
+        self::add(self::POST, $uri, $controller);
     }
 
     public static function put(string $uri, string|array|callable $controller): void
     {
-        self::add('PUT', $uri, $controller);
+        self::add(self::PUT, $uri, $controller);
     }
 
     public static function delete(string $uri, string|array|callable $controller): void
     {
-        self::add('DELETE', $uri, $controller);
+        self::add(self::DELETE, $uri, $controller);
     }
 
     public static function dispatch(Container $container): void
