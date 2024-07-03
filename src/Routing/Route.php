@@ -54,7 +54,7 @@ final class Route
         self::$currentGroupAttributes = $previousGroupAttributes;
     }
 
-    public static function add(string $method, string $uri, string|array|callable $controller): void
+    public static function add(string $method, string $uri, string|array $controller): void
     {
         $uri = '/' . trim(self::$currentGroupAttributes['prefix'] . '/' . trim($uri, '/'), '/');
         self::$routes[$method][$uri] = [
@@ -63,23 +63,22 @@ final class Route
         ];
     }
 
-    public static function get(string $uri, string|array|callable $controller): void
+    public static function get(string $uri, string|array $controller): void
     {
         self::add(self::GET, $uri, $controller);
     }
 
-    // Add similar methods for POST, PUT, DELETE
-    public static function post(string $uri, string|array|callable $controller): void
+    public static function post(string $uri, string|array $controller): void
     {
         self::add(self::POST, $uri, $controller);
     }
 
-    public static function put(string $uri, string|array|callable $controller): void
+    public static function put(string $uri, string|array $controller): void
     {
         self::add(self::PUT, $uri, $controller);
     }
 
-    public static function delete(string $uri, string|array|callable $controller): void
+    public static function delete(string $uri, string|array $controller): void
     {
         self::add(self::DELETE, $uri, $controller);
     }
