@@ -18,9 +18,10 @@ final class Router
     const PUT = 'PUT';
     const DELETE = 'DELETE';
 
-    public function __construct(Container $container)
+    public function __construct(Container $container, string $routePath)
     {
         $this->container = $container;
+        $this->loadRoutes($routePath);
         Route::setControllerDispatcher(new ControllerDispatcher($this->container));
     }
 
@@ -105,6 +106,14 @@ final class Router
         };
 
         return $this->callMiddlewareStack($request, $response, $last);
+    }
+
+    private function loadRoutes(string $routePath): void
+    {
+        $routeFiles = glob($routePath);
+        foreach ($routeFiles as $file) {
+            require $file;
+        }
     }
 
     private function callMiddlewareStack(Request $request, Response $response, callable $last): Response
