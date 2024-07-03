@@ -82,34 +82,25 @@ final class Route
         $method = $_SERVER['REQUEST_METHOD'];
 
         // Get route information
-        $routeInfo = self::getRouteInfo($method, $query);
+        [$controller, $middleware, $params] = self::getRouteInfo($method, $query);
 
-        if ($routeInfo) {
-            $controller = $routeInfo['controller'];
-            $middleware = $routeInfo['middleware'];
-            $params = $routeInfo['params'];
-
-            // Process middleware
+        if ($controller !== null) {
             $request = new Request();
             $response = new Response();
 
-            foreach ($middleware as $mwClass) {
-                $middlewareInstance = $container->get($mwClass);
-                $response = $middlewareInstance->process($request, $response, new Handler(function($req) use($controller, $params) {
-                    self::invokeController($controller, $params);
-                    return new Response();
-                }));
-            }
+            $response = self::processMiddleware($container, $middleware, $request, $response, function($req, $res) use ($controller, $params) {
+                self::invokeController($controller, $params);
+                return $res;
+            });
 
-            // Invoke controller
-            self::invokeController($controller, $params);
+            echo $response->getBody();
         } else {
             // Route not found
             self::notFound($container->get(I18n::class));
         }
     }
 
-    public static function getRouteInfo(string $method, string $uri): ?array
+    public static function getRouteInfo(string $method, string $uri): array
     {
         if (isset(self::$routes[$method])) {
             foreach (self::$routes[$method] as $routeUri => $routeInfo) {
@@ -119,15 +110,15 @@ final class Route
                 if (preg_match($pattern, $uri, $matches)) {
                     array_shift($matches); // Remove full match
                     return [
-                        'controller' => $routeInfo['controller'],
-                        'middleware' => $routeInfo['middleware'],
-                        'params' => $matches
+                        $routeInfo['controller'],
+                        $routeInfo['middleware'],
+                        $matches
                     ];
                 }
             }
         }
 
-        return null;
+        return [null, [], []];
     }
 
     private static function add(string $method, string $uri, string|array $controller): void
