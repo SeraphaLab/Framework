@@ -24,6 +24,7 @@ REDIS_DATABASE=0
 
 # Path
 CONFIG_FILE=/app/Config/config.inc.php
-LANG_PATH=/lang
+ROUTE_PATH=/app/Route
+LANG_PATH=/app/Language
 CACHE_PATH=/storage/cache
 ```

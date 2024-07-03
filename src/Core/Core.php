@@ -5,7 +5,6 @@ use Serapha\Service\ServiceLocator;
 use Serapha\Model\ModelLocator;
 use Serapha\Template\Template;
 use Serapha\Routing\Router;
-use Serapha\Middleware\GlobalMiddleware;
 use Serapha\Utils\Utils;
 use carry0987\Sanite\Sanite;
 use carry0987\I18n\I18n;
@@ -18,7 +17,7 @@ final class Core
     public function __construct(array $coreConfig = [])
     {
         // Get configurations
-        [$configFile, $langPath, $cachePath] = self::setConfig($coreConfig);
+        [$configFile, $routePath, $langPath, $cachePath] = self::setConfig($coreConfig);
 
         // Load configuration
         $config = new Config(Utils::trimPath('/'.$configFile));
@@ -42,7 +41,7 @@ final class Core
             'cachePath' => Utils::trimPath('/'.$cachePath.'/lang'),
             'useAutoDetect' => true
         ]));
-        $this->container->singleton(Router::class, fn($container) => new Router($container));
+        $this->container->singleton(Router::class, fn($container) => new Router($container, $routePath));
 
         // Register the container for loactor
         ServiceLocator::setContainer($this->container);
@@ -58,13 +57,10 @@ final class Core
     public function run(string $query = '/'): void
     {
         // Get the router instance and dispatch the query
+        /** @var Router */
         $router = $this->container->get(Router::class);
-        // Register necessary services in the container
-        $this->container->bind(GlobalMiddleware::class, fn() => new GlobalMiddleware());
-        // Register global-level middleware
-        $router->addMiddleware($this->container->get(GlobalMiddleware::class));
         // Dispatch the query
-        $router->dispatch($query);
+        $router->handleRequest($query);
     }
 
     /**
@@ -92,6 +88,7 @@ final class Core
     {
         // Initialize variables
         $configFile = dirname(__DIR__, 5).'/';
+        $routePath = dirname(__DIR__, 5).'/';
         $langPath = dirname(__DIR__, 5).'/';
         $cachePath = dirname(__DIR__, 5).'/';
 
@@ -101,6 +98,13 @@ final class Core
         } else {
             $configFile .= $_ENV['CONFIG_FILE'] ?? '/config/config.inc.php';
             $configFile = Utils::trimPath($configFile);
+        }
+
+        if (isset($coreConfig['routePath'])) {
+            $routePath = $coreConfig['routePath'];
+        } else {
+            $routePath .= $_ENV['ROUTE_PATH'] ?? '/app/Route';
+            $routePath = Utils::trimPath($routePath . '/*.php');
         }
 
         if (isset($coreConfig['langPath'])) {
@@ -117,7 +121,7 @@ final class Core
             $cachePath = Utils::trimPath($cachePath);
         }
 
-        return [$configFile, $langPath, $cachePath];
+        return [$configFile, $routePath, $langPath, $cachePath];
     }
 
     private static function setRedis(Config $config): RedisTool|null
