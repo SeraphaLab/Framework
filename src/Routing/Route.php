@@ -54,15 +54,6 @@ final class Route
         self::$currentGroupAttributes = $previousGroupAttributes;
     }
 
-    public static function add(string $method, string $uri, string|array $controller): void
-    {
-        $uri = '/' . trim(self::$currentGroupAttributes['prefix'] . '/' . trim($uri, '/'), '/');
-        self::$routes[$method][$uri] = [
-            'controller' => $controller,
-            'middleware' => self::$currentGroupAttributes['middleware'],
-        ];
-    }
-
     public static function get(string $uri, string|array $controller): void
     {
         self::add(self::GET, $uri, $controller);
@@ -139,6 +130,15 @@ final class Route
         return null;
     }
 
+    private static function add(string $method, string $uri, string|array $controller): void
+    {
+        $uri = '/' . trim(self::$currentGroupAttributes['prefix'] . '/' . trim($uri, '/'), '/');
+        self::$routes[$method][$uri] = [
+            'controller' => $controller,
+            'middleware' => self::$currentGroupAttributes['middleware'],
+        ];
+    }
+
     private static function parseController($controller): array
     {
         if (is_string($controller)) {
@@ -167,6 +167,18 @@ final class Route
         }
 
         self::$controllerDispatcher->dispatch($controllerName, $action, $params);
+    }
+
+    private static function processMiddleware(Container $container, array $middleware, Request $request, Response $response, callable $next): Response
+    {
+        foreach (array_reverse($middleware) as $mwClass) {
+            $next = function($req, $res) use ($container, $mwClass, $next) {
+                $middlewareInstance = $container->get($mwClass);
+                return $middlewareInstance->process($req, $res, new Handler($next));
+            };
+        }
+
+        return $next($request, $response);
     }
 
     private static function notFound(I18n $i18n): void
