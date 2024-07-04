@@ -58,9 +58,9 @@ final class Router
         Route::group($callback);
     }
 
-    public function handleRequest(): void
+    public function handleRequest(string $query): void
     {
-        Route::dispatch($this->container);
+        Route::dispatch($this->container, $query);
     }
 
     private function loadRoutes(string $routePath): void

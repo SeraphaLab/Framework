@@ -74,10 +74,9 @@ final class Route
         self::add(self::DELETE, $uri, $controller);
     }
 
-    public static function dispatch(Container $container): void
+    public static function dispatch(Container $container, string $query): void
     {
         // Get query parameter from request
-        $query = $_GET['query'] ?? '/';
         $query = empty($query) ? '/' : $query;
         $method = $_SERVER['REQUEST_METHOD'];
 
