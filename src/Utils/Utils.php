@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Serapha\Utils;
 
 use carry0987\Utils\Utils as BaseUtils;

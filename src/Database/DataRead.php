@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Serapha\Database;
 
 use carry0987\Sanite\Models\DataReadModel;
