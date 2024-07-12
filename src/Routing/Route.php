@@ -18,11 +18,18 @@ final class Route
     const GET = 'GET';
     const POST = 'POST';
     const PUT = 'PUT';
+    const PATCH = 'PATCH';
     const DELETE = 'DELETE';
+    const OPTIONS = 'OPTIONS';
 
     public static function setControllerDispatcher(ControllerDispatcher $controllerDispatcher): void
     {
         self::$controllerDispatcher = $controllerDispatcher;
+    }
+
+    public static function supportedMethods(): array
+    {
+        return [self::GET, self::POST, self::PUT, self::PATCH, self::DELETE, self::OPTIONS];
     }
 
     public static function group(array $attributes, callable $callback): void
@@ -63,14 +70,14 @@ final class Route
             $groupAttributes = end(self::$groupStack);
             foreach ($methods as $method) {
                 $groupUri = ($groupAttributes['prefix'] ?? '') . $uri;
-                self::$routes[strtoupper($method)][$groupUri] = [
+                self::$routes[$method][$groupUri] = [
                     'controller' => $action['uses'] ?? $action,
                     'middleware' => array_merge($groupAttributes['middleware'] ?? [], $action['middleware'] ?? [])
                 ];
             }
         } else {
             foreach ($methods as $method) {
-                self::$routes[strtoupper($method)][$uri] = [
+                self::$routes[$method][$uri] = [
                     'controller' => $action['uses'] ?? $action,
                     'middleware' => $action['middleware'] ?? []
                 ];

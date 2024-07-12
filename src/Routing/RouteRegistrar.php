@@ -30,9 +30,10 @@ class RouteRegistrar
 
     public function __call(string $method, array $parameters)
     {
+        $method = strtoupper($method);
         [$uri, $controller] = $parameters;
 
-        if (in_array($method, ['get', 'post', 'put', 'patch', 'delete', 'options'])) {
+        if (in_array($method, Route::supportedMethods(), true)) {
             return Route::addRoute($method, $uri, array_merge($this->attributes, ['uses' => $controller]));
         }
 
