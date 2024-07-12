@@ -43,9 +43,9 @@ final class Route
         array_pop(self::$groupStack);
     }
 
-    public static function where(string $name, string $expression): self
+    public static function where(array|string $match, string|null $expression = null): self
     {
-        if (empty($name) || empty($expression)) {
+        if (is_string($match) && (empty($match) || empty($expression))) {
             return new self;
         }
 
@@ -53,7 +53,14 @@ final class Route
             if (!isset(self::$routesWheres[self::$currentRoute])) {
                 self::$routesWheres[self::$currentRoute] = [];
             }
-            self::$routesWheres[self::$currentRoute][$name] = $expression;
+    
+            if (is_array($match)) {
+                foreach ($match as $param => $regex) {
+                    self::$routesWheres[self::$currentRoute][$param] = $regex;
+                }
+            } else {
+                self::$routesWheres[self::$currentRoute][$match] = $expression;
+            }
         }
 
         return new self;
@@ -124,7 +131,7 @@ final class Route
             }
         }
 
-        return self::where('', '');
+        return self::where('');
     }
 
     public static function dispatch(Container $container, string $query): void
@@ -157,18 +164,15 @@ final class Route
         if (isset(self::$routes[$method])) {
             foreach (self::$routes[$method] as $routeUri => $routeInfo) {
                 $wheres = self::$routesWheres[$routeUri] ?? [];
-                $pattern = preg_replace_callback('/\{([a-zA-Z0-9_]+)\}/', function ($matches) use ($wheres) {
-                    $param = $matches[1];
-                    return isset($wheres[$param]) ? "({$wheres[$param]})" : '([a-zA-Z0-9_]+)';
-                }, $routeUri);
-                $pattern = "#^{$pattern}$#";
+                $pattern = self::buildPattern($routeUri, $wheres);
+                $pattern = '#^'.$pattern.'$#';
 
                 if (preg_match($pattern, $uri, $matches)) {
                     array_shift($matches); // Remove full match
                     return [
                         $routeInfo['controller'],
                         $routeInfo['middleware'],
-                        $matches
+                        array_filter($matches) // Remove empty matches for optional params
                     ];
                 }
             }
@@ -217,6 +221,18 @@ final class Route
         }
 
         return $next($request, $response);
+    }
+
+    private static function buildPattern(string $routeUri, array $wheres): string
+    {
+        $pattern = preg_replace_callback('/(\/)\{([a-zA-Z0-9_]+)\??\}/', function ($matches) use ($wheres) {
+            $param = $matches[2];
+            $optional = substr($matches[0], -2, 1) === '?' ? '?' : null;
+            $regex = $wheres[$param] ?? '[a-zA-Z0-9_]+';
+            return ($optional !== null) ? '(?:/('.$regex.'))?' : '/('.$regex.')(?:\/)?';
+        }, $routeUri);
+
+        return $pattern;
     }
 
     private static function notFound(I18n $i18n): void
