@@ -13,6 +13,8 @@ final class Route
     private static ControllerDispatcher $controllerDispatcher;
     private static array $routes = [];
     private static array $groupStack = [];
+    private static array $routesWheres = [];
+    private static ?string $currentRoute = null;
 
     // Define HTTP methods as constants
     const GET = 'GET';
@@ -39,6 +41,22 @@ final class Route
         $callback();
 
         array_pop(self::$groupStack);
+    }
+
+    public static function where(string $name, string $expression): self
+    {
+        if (empty($name) || empty($expression)) {
+            return new self;
+        }
+
+        if (self::$currentRoute !== null) {
+            if (!isset(self::$routesWheres[self::$currentRoute])) {
+                self::$routesWheres[self::$currentRoute] = [];
+            }
+            self::$routesWheres[self::$currentRoute][$name] = $expression;
+        }
+
+        return new self;
     }
 
     public static function prefix(string $uri): RouteRegistrar
@@ -94,6 +112,7 @@ final class Route
                     'controller' => $action['uses'] ?? $action,
                     'middleware' => array_merge($groupAttributes['middleware'] ?? [], $action['middleware'] ?? [])
                 ];
+                self::$currentRoute = $groupUri;
             }
         } else {
             foreach ($methods as $method) {
@@ -101,10 +120,11 @@ final class Route
                     'controller' => $action['uses'] ?? $action,
                     'middleware' => $action['middleware'] ?? []
                 ];
+                self::$currentRoute = $uri;
             }
         }
 
-        return new self; 
+        return self::where('', '');
     }
 
     public static function dispatch(Container $container, string $query): void
@@ -136,7 +156,11 @@ final class Route
     {
         if (isset(self::$routes[$method])) {
             foreach (self::$routes[$method] as $routeUri => $routeInfo) {
-                $pattern = preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9_]+)', $routeUri);
+                $wheres = self::$routesWheres[$routeUri] ?? [];
+                $pattern = preg_replace_callback('/\{([a-zA-Z0-9_]+)\}/', function ($matches) use ($wheres) {
+                    $param = $matches[1];
+                    return isset($wheres[$param]) ? "({$wheres[$param]})" : '([a-zA-Z0-9_]+)';
+                }, $routeUri);
                 $pattern = "#^{$pattern}$#";
 
                 if (preg_match($pattern, $uri, $matches)) {
