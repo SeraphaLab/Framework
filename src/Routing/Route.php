@@ -12,68 +12,99 @@ final class Route
 {
     private static ControllerDispatcher $controllerDispatcher;
     private static array $routes = [];
-    private static array $currentGroupAttributes = [
-        'prefix' => '',
-        'middleware' => []
-    ];
+    private static array $groupStack = [];
 
     // Define HTTP methods as constants
     const GET = 'GET';
     const POST = 'POST';
     const PUT = 'PUT';
+    const PATCH = 'PATCH';
     const DELETE = 'DELETE';
+    const OPTIONS = 'OPTIONS';
 
     public static function setControllerDispatcher(ControllerDispatcher $controllerDispatcher): void
     {
         self::$controllerDispatcher = $controllerDispatcher;
     }
 
-    public static function middleware(array|string $middleware): self
+    public static function supportedMethods(): array
     {
-        self::$currentGroupAttributes['middleware'] = array_merge(
-            self::$currentGroupAttributes['middleware'],
-            (array) $middleware
-        );
-
-        return new self;
+        return [self::GET, self::POST, self::PUT, self::PATCH, self::DELETE, self::OPTIONS];
     }
 
-    public static function prefix(string $prefix): self
+    public static function group(array $attributes, callable $callback): void
     {
-        self::$currentGroupAttributes['prefix'] = trim($prefix, '/');
-
-        return new self;
-    }
-
-    public static function group(\Closure $callback): void
-    {
-        // Save previous state
-        $previousGroupAttributes = self::$currentGroupAttributes;
+        self::$groupStack[] = $attributes;
 
         $callback();
 
-        // Reset to previous state
-        self::$currentGroupAttributes = $previousGroupAttributes;
+        array_pop(self::$groupStack);
     }
 
-    public static function get(string $uri, string|array $controller): void
+    public static function prefix(string $uri): RouteRegistrar
     {
-        self::add(self::GET, $uri, $controller);
+        return (new RouteRegistrar)->prefix($uri);
     }
 
-    public static function post(string $uri, string|array $controller): void
+    public static function middleware(string $middleware): RouteRegistrar
     {
-        self::add(self::POST, $uri, $controller);
+        return (new RouteRegistrar)->middleware($middleware);
     }
 
-    public static function put(string $uri, string|array $controller): void
+    public static function get(string $uri, array|string|callable|null $action = null): Route
     {
-        self::add(self::PUT, $uri, $controller);
+        return self::addRoute(self::GET, $uri, $action);
     }
 
-    public static function delete(string $uri, string|array $controller): void
+    public static function post(string $uri, array|string|callable|null $action = null): Route
     {
-        self::add(self::DELETE, $uri, $controller);
+        return self::addRoute(self::POST, $uri, $action);
+    }
+
+    public static function put(string $uri, array|string|callable|null $action = null): Route
+    {
+        return self::addRoute(self::PUT, $uri, $action);
+    }
+
+    public static function patch(string $uri, array|string|callable|null $action = null): Route
+    {
+        return self::addRoute(self::PATCH, $uri, $action);
+    }
+
+    public static function delete(string $uri, array|string|callable|null $action = null): Route
+    {
+        return self::addRoute(self::DELETE, $uri, $action);
+    }
+
+    public static function options(string $uri, array|string|callable|null $action = null): Route
+    {
+        return self::addRoute(self::OPTIONS, $uri, $action);
+    }
+
+    public static function addRoute(string|array $methods, string $uri, array|string|callable|null $action = null): Route
+    {
+        $methods = (array) $methods;
+
+        // Process group stack attributes
+        if (!empty(self::$groupStack)) {
+            $groupAttributes = end(self::$groupStack);
+            foreach ($methods as $method) {
+                $groupUri = ($groupAttributes['prefix'] ?? '') . $uri;
+                self::$routes[$method][$groupUri] = [
+                    'controller' => $action['uses'] ?? $action,
+                    'middleware' => array_merge($groupAttributes['middleware'] ?? [], $action['middleware'] ?? [])
+                ];
+            }
+        } else {
+            foreach ($methods as $method) {
+                self::$routes[$method][$uri] = [
+                    'controller' => $action['uses'] ?? $action,
+                    'middleware' => $action['middleware'] ?? []
+                ];
+            }
+        }
+
+        return new self; 
     }
 
     public static function dispatch(Container $container, string $query): void
@@ -101,7 +132,7 @@ final class Route
         }
     }
 
-    public static function getRouteInfo(string $method, string $uri): array
+    private static function getRouteInfo(string $method, string $uri): array
     {
         if (isset(self::$routes[$method])) {
             foreach (self::$routes[$method] as $routeUri => $routeInfo) {
@@ -120,18 +151,6 @@ final class Route
         }
 
         return [null, [], []];
-    }
-
-    private static function add(string $method, string $uri, string|array $controller): void
-    {
-        $uri = '/' . trim(self::$currentGroupAttributes['prefix'] . '/' . trim($uri, '/'), '/');
-        self::$routes[$method][$uri] = [
-            'controller' => $controller,
-            'middleware' => self::$currentGroupAttributes['middleware'],
-        ];
-
-        // Reset middleware after adding route
-        self::$currentGroupAttributes['middleware'] = [];
     }
 
     private static function parseController(string|array $controller): array
