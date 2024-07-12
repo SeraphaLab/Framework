@@ -45,7 +45,7 @@ final class Dispatcher
         if ($reflector->hasMethod('__construct')) {
             $constructor = $reflector->getConstructor();
             $parameters = $constructor->getParameters();
-            $dependencies = array_map(function($param) {
+            $dependencies = array_map(function ($param) {
                 if ($param->getType() && !$param->getType()->isBuiltin()) {
                     return $this->container->get($param->getType()->getName());
                 }

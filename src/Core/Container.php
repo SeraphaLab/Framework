@@ -79,7 +79,7 @@ final class Container implements ContainerInterface
         }
 
         $parameters = $constructor->getParameters();
-        $dependencies = array_map(function(ReflectionParameter $param) {
+        $dependencies = array_map(function (ReflectionParameter $param) {
             $paramType = $param->getType();
             if ($paramType) {
                 // Check if the parameter type is a UnionType

@@ -6,6 +6,7 @@ namespace Serapha\Routing;
 use carry0987\I18n\I18n;
 use Serapha\Core\Container;
 use Serapha\Controller\ControllerDispatcher;
+use Closure;
 use Exception;
 
 final class Route
@@ -116,16 +117,16 @@ final class Route
             foreach ($methods as $method) {
                 $groupUri = ($groupAttributes['prefix'] ?? '') . $uri;
                 self::$routes[$method][$groupUri] = [
-                    'controller' => $action['uses'] ?? $action,
-                    'middleware' => array_merge($groupAttributes['middleware'] ?? [], $action['middleware'] ?? [])
+                    'controller' => $action instanceof Closure ? $action : ($action['uses'] ?? $action),
+                    'middleware' => $action instanceof Closure ? [] : array_merge($groupAttributes['middleware'] ?? [], $action['middleware'] ?? [])
                 ];
                 self::$currentRoute = $groupUri;
             }
         } else {
             foreach ($methods as $method) {
                 self::$routes[$method][$uri] = [
-                    'controller' => $action['uses'] ?? $action,
-                    'middleware' => $action['middleware'] ?? []
+                    'controller' => $action instanceof Closure ? $action : ($action['uses'] ?? $action),
+                    'middleware' => $action instanceof Closure ? [] : $action['middleware'] ?? []
                 ];
                 self::$currentRoute = $uri;
             }
@@ -147,7 +148,7 @@ final class Route
             $request = new Request();
             $response = new Response();
 
-            $response = self::processMiddleware($container, $middleware, $request, $response, function($req, $res) use ($controller, $params) {
+            $response = self::processMiddleware($container, $middleware, $request, $response, function ($req, $res) use ($controller, $params) {
                 self::invokeController($controller, $params);
                 return $res;
             });
@@ -194,14 +195,20 @@ final class Route
             $controllerName = $controller[0];
             $action = $controller[1] ?? 'index';
         } else {
-            throw new Exception("Invalid controller definition");
+            throw new Exception('Invalid controller definition');
         }
 
         return [$controllerName, $action];
     }
 
-    private static function invokeController(string|array $controller, array $params): void
+    private static function invokeController(string|array|callable $controller, array $params): void
     {
+        if ($controller instanceof Closure) {
+            // Call the closure directly
+            call_user_func_array($controller, $params);
+            return;
+        }
+
         [$controllerName, $action] = self::parseController($controller);
 
         if (!class_exists($controllerName)) {
@@ -214,7 +221,7 @@ final class Route
     private static function processMiddleware(Container $container, array $middleware, Request $request, Response $response, callable $next): Response
     {
         foreach (array_reverse($middleware) as $mwClass) {
-            $next = function($req, $res) use ($container, $mwClass, $next) {
+            $next = function ($req, $res) use ($container, $mwClass, $next) {
                 $middlewareInstance = $container->get($mwClass);
                 return $middlewareInstance->process($req, $res, new Handler($next));
             };
