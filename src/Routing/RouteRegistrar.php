@@ -30,8 +30,10 @@ class RouteRegistrar
 
     public function __call(string $method, array $parameters)
     {
+        [$uri, $controller] = $parameters;
+
         if (in_array($method, ['get', 'post', 'put', 'patch', 'delete', 'options'])) {
-            return Route::addRoute($method, $parameters[0], array_merge($this->attributes, ['uses' => $parameters[1]]));
+            return Route::addRoute($method, $uri, array_merge($this->attributes, ['uses' => $controller]));
         }
 
         throw new \BadMethodCallException("Method {$method} does not exist.");
