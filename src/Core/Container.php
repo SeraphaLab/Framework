@@ -44,7 +44,7 @@ final class Container implements ContainerInterface
         return isset($this->instances[$id]) || isset($this->bindings[$id]);
     }
 
-    public function resolve(string $abstract)
+    private function resolve(string $abstract)
     {
         if (isset($this->instances[$abstract])) {
             return $this->instances[$abstract];
@@ -60,7 +60,7 @@ final class Container implements ContainerInterface
         return $object;
     }
 
-    public function build($concrete)
+    private function build($concrete)
     {
         if ($concrete instanceof \Closure) {
             return $concrete($this);

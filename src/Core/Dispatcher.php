@@ -10,6 +10,7 @@ use Exception;
 final class Dispatcher
 {
     protected Container $container;
+    private array $initializedClasses = [];
 
     public function __construct(Container $container)
     {
@@ -46,8 +47,16 @@ final class Dispatcher
         if ($reflector->hasMethod('__construct')) {
             $constructor = $reflector->getConstructor();
             $parameters = $constructor->getParameters();
+
+            // Check if the class has been initialized
+            $className = $constructor->getDeclaringClass()->getName();
+            if (isset($this->initializedClasses[$className])) {
+                return;
+            }
+            $this->initializedClasses[$className] = $instance;
+
+            // Resolve dependencies
             $dependencies = array_map(function (ReflectionParameter $param) {
-                // Resolve dependencies
                 if ($param->getType() && !$param->getType()->isBuiltin()) {
                     return $this->container->get($param->getType()->getName());
                 }
