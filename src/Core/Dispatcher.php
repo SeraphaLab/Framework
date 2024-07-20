@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Serapha\Core;
 
 use ReflectionClass;
+use ReflectionParameter;
 use Exception;
 
 final class Dispatcher
@@ -45,7 +46,7 @@ final class Dispatcher
         if ($reflector->hasMethod('__construct')) {
             $constructor = $reflector->getConstructor();
             $parameters = $constructor->getParameters();
-            $dependencies = array_map(function ($param) {
+            $dependencies = array_map(function (ReflectionParameter $param) {
                 if ($param->getType() && !$param->getType()->isBuiltin()) {
                     return $this->container->get($param->getType()->getName());
                 }
