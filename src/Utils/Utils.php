@@ -30,6 +30,23 @@ final class Utils extends BaseUtils
     }
 
     /**
+     * Check if the request is HTTPS.
+     *
+     * @return bool
+     */
+    public static function checkHttps(): bool
+    {
+        if (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) === 'on') {
+            return true;
+        } elseif (isset($_SERVER['HTTP_CF_VISITOR'])) {
+            $visitor = json_decode($_SERVER['HTTP_CF_VISITOR']);
+            if ($visitor->scheme === 'https') return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Redirect to a given URL.
      *
      * @param string $url
