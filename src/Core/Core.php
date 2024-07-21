@@ -41,7 +41,14 @@ final class Core
         $this->container->singleton(I18n::class, fn() => new I18n([
             'langFilePath' => Utils::trimPath('/'.$langPath),
             'cachePath' => Utils::trimPath('/'.$cachePath.'/lang'),
-            'useAutoDetect' => true
+            'useAutoDetect' => true,
+            'cookie' => [
+                'name' => 'lang',
+                'expire' => time()+86400,
+                'path' => Utils::trimPath(dirname($_SERVER['PHP_SELF'], 2).'/'),
+                'domain' => '',
+                'httponly' => true
+            ]
         ]));
         $this->container->singleton(Router::class, fn($container) => new Router($container, $routePath));
 
