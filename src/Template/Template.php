@@ -89,4 +89,16 @@ final class Template
 
         return $this;
     }
+
+    /**
+     * Set the path to the assets.
+     * @param callable $path
+     * @return void
+     */
+    public function assetPath(callable $path): self
+    {
+        $this->template->assetPath($path);
+
+        return $this;
+    }
 }
