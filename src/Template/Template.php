@@ -92,12 +92,12 @@ final class Template
 
     /**
      * Set the path to the assets.
-     * @param callable $path
+     * @param callable $holder
      * @return void
      */
-    public function assetPath(callable $path): self
+    public function assetPath(callable $holder): self
     {
-        $this->template->assetPath($path);
+        $this->template->assetPath($holder);
 
         return $this;
     }
