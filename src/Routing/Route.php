@@ -138,9 +138,8 @@ final class Route
     public static function dispatch(Container $container, string $query): void
     {
         // Get query parameter from request
-        $query = empty($query) ? '/' : $query;
+        $path = self::getRouteUri($query);
         $method = $_SERVER['REQUEST_METHOD'];
-        $path = parse_url($query, PHP_URL_PATH);
 
         // Get route information
         [$controller, $middleware, $params] = self::getRouteInfo($method, $path);
@@ -159,6 +158,31 @@ final class Route
             // Route not found
             self::notFound($container->get(I18n::class));
         }
+    }
+
+    private static function getRouteURI(string $query): string
+    {
+        // Extract the path information from the URI
+        $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+
+        // Check if is in routing mode
+        if (strncmp($query, $scriptName, strlen($scriptName)) === 0) {
+            $uri = substr($query, strlen($scriptName));
+        } elseif (strncmp($query, dirname($scriptName), strlen(dirname($scriptName))) === 0) {
+            $uri = substr($query, strlen(dirname($scriptName)));
+        } else {
+            $uri = $query;
+        }
+
+        // Ensure the leading slash
+        $path = '/' . ltrim($uri, '/?');
+
+        // Remove query string from the path
+        if (strpos($path, '?') !== false) {
+            $path = substr($path, 0, strpos($path, '?'));
+        }
+
+        return $path;
     }
 
     private static function getRouteInfo(string $method, string $uri): array
