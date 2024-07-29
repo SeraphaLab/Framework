@@ -140,9 +140,10 @@ final class Route
         // Get query parameter from request
         $query = empty($query) ? '/' : $query;
         $method = $_SERVER['REQUEST_METHOD'];
+        $path = parse_url($query, PHP_URL_PATH);
 
         // Get route information
-        [$controller, $middleware, $params] = self::getRouteInfo($method, $query);
+        [$controller, $middleware, $params] = self::getRouteInfo($method, $path);
 
         if ($controller !== null) {
             $request = new Request();
