@@ -121,7 +121,7 @@ class Response implements ResponseInterface
     public function redirect(string $url, ?int $status = 302): void
     {
         // Construct the query parameter part
-        $queryUrl = '?query=/' . $url;
+        $queryUrl = '?/' . $url;
         // Get the base directory of the script
         $baseDir = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
         // Construct the full URL with the query parameter
