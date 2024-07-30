@@ -56,4 +56,22 @@ final class Utils extends BaseUtils
     {
         parent::redirectURL($url);
     }
+
+    /**
+     * Determine if URL rewriting is enabled.
+     *
+     * @return bool
+     */
+    public static function isRewriteEnabled(): bool
+    {
+        $scriptName = $_SERVER['SCRIPT_NAME'];
+        $requestUri = $_SERVER['REQUEST_URI'];
+
+        // Remove the query string from REQUEST_URI if it exists
+        $requestPath = explode('?', $requestUri, 2)[0];
+        $indexInRequest = strpos($requestPath, basename($scriptName)) !== false;
+        $directIndexUsage = preg_match('/\/(?:\/|\?)/', $requestUri);
+
+        return !$indexInRequest && !$directIndexUsage;
+    }
 }
