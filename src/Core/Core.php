@@ -8,6 +8,7 @@ use Serapha\Model\ModelLocator;
 use Serapha\Template\Template;
 use Serapha\Routing\Router;
 use Serapha\Utils\Utils;
+use Serapha\Exception\InitializationException;
 use carry0987\Sanite\Sanite;
 use carry0987\I18n\I18n;
 use carry0987\Redis\RedisTool;
@@ -133,7 +134,7 @@ final class Core
         return [$configFile, $routePath, $langPath, $cachePath];
     }
 
-    private static function setRedis(Config $config): RedisTool|null
+    private static function setRedis(Config $config): RedisTool
     {
         // Redis configuration
         try {
@@ -144,7 +145,7 @@ final class Core
                 'database' => $config->get('REDIS_DATABASE')
             ]);
         } catch (\Exception $e) {
-            return null;
+            throw new InitializationException('Failed to connect to Redis server.', 0, $e);
         }
     }
 }
