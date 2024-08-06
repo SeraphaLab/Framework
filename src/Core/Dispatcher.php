@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Serapha\Core;
 
+use Serapha\Exception\DispatcherException;
 use ReflectionClass;
 use ReflectionParameter;
-use Exception;
 
 final class Dispatcher
 {
@@ -22,7 +22,7 @@ final class Dispatcher
         $reflector = new ReflectionClass($class);
 
         if (!$reflector->isInstantiable()) {
-            throw new Exception("Class {$class} is not instantiable.");
+            throw new DispatcherException("Class {$class} is not instantiable.");
         }
 
         $instance = $reflector->newInstanceWithoutConstructor();
@@ -65,7 +65,7 @@ final class Dispatcher
                     return $param->getDefaultValue();
                 }
 
-                throw new Exception("Cannot resolve the dependency {$param->name}");
+                throw new DispatcherException("Cannot resolve the dependency {$param->name}");
             }, $parameters);
 
             $constructor->invokeArgs($instance, $dependencies);

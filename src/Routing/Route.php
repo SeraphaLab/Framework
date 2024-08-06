@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace Serapha\Routing;
 
-use carry0987\I18n\I18n;
 use Serapha\Core\Container;
 use Serapha\Controller\ControllerDispatcher;
+use Serapha\Exception\RoutingException;
+use carry0987\I18n\I18n;
 use Closure;
-use Exception;
 
 final class Route
 {
@@ -220,7 +220,7 @@ final class Route
             $controllerName = $controller[0];
             $action = $controller[1] ?? 'index';
         } else {
-            throw new Exception('Invalid controller definition');
+            throw new RoutingException('Invalid controller definition');
         }
 
         return [$controllerName, $action];
@@ -237,7 +237,7 @@ final class Route
         [$controllerName, $action] = self::parseController($controller);
 
         if (!class_exists($controllerName)) {
-            throw new Exception("Controller [$controllerName] not found");
+            throw new RoutingException("Controller [$controllerName] not found");
         }
 
         self::$controllerDispatcher->dispatch($controllerName, $action, $params);

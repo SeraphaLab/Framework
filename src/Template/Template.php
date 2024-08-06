@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Serapha\Template;
 
 use Serapha\Core\Container;
+use Serapha\Exception\TemplateException;
 use carry0987\Sanite\Sanite;
 use carry0987\Redis\RedisTool;
 use carry0987\Template\Template as TemplateEngine;
@@ -60,7 +61,7 @@ final class Template
      * @param array $templates
      * @param array $data
      * @return void
-     * @throws \Exception
+     * @throws TemplateException
      */
     public function render(array $templates, array $data = []): void
     {
@@ -73,7 +74,7 @@ final class Template
                 extract($data);
                 include($filepath);
             } else {
-                throw new \Exception("Template file not found: $template");
+                throw new TemplateException("Template file not found: $template");
             }
         }
     }

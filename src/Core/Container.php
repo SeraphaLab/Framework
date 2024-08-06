@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace Serapha\Core;
 
+use Serapha\Exception\ContainerException;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionParameter;
 use ReflectionUnionType;
-use Exception;
 
 final class Container implements ContainerInterface
 {
@@ -32,11 +32,9 @@ final class Container implements ContainerInterface
     {
         try {
             return $this->resolve($id);
-        } catch (Exception $e) {
-            throw $e;
+        } catch (\Exception $e) {
+            throw new ContainerException("No entry or class found for '{$id}'.", 0, $e);
         }
-
-        throw new Exception("No entry or class found for '{$id}'.");
     }
 
     public function has(string $id): bool
@@ -69,7 +67,7 @@ final class Container implements ContainerInterface
         $reflector = new ReflectionClass($concrete);
 
         if (!$reflector->isInstantiable()) {
-            throw new Exception("Class {$concrete} is not instantiable.");
+            throw new ContainerException("Class {$concrete} is not instantiable.");
         }
 
         $constructor = $reflector->getConstructor();
@@ -99,7 +97,7 @@ final class Container implements ContainerInterface
                 return $param->getDefaultValue();
             }
 
-            throw new Exception("Cannot resolve the dependency {$param->name}");
+            throw new ContainerException("Cannot resolve the dependency {$param->name}");
         }, $parameters);
 
         return $reflector->newInstanceArgs($dependencies);
