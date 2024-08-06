@@ -66,11 +66,19 @@ final class Utils extends BaseUtils
     {
         $scriptName = $_SERVER['SCRIPT_NAME'];
         $requestUri = $_SERVER['REQUEST_URI'];
+        $scriptPath = str_replace('index.php', '', $scriptName);
+        $scriptPath = rtrim($scriptPath, '/');
+
+        // Check if the script name is in the request
+        $checkPublic = substr($scriptPath, strrpos($scriptPath, '/') + 1);
+        if ($scriptPath === rtrim($requestUri, '/') && $checkPublic === 'public') {
+            return false;
+        }
 
         // Remove the query string from REQUEST_URI if it exists
         $requestPath = explode('?', $requestUri, 2)[0];
         $indexInRequest = strpos($requestPath, basename($scriptName)) !== false;
-        $directIndexUsage = preg_match('/\/(?:\/|\?)/', $requestUri);
+        $directIndexUsage = preg_match('/\/(?:\/|\?)/', $requestUri, $matches);
 
         return !$indexInRequest && !$directIndexUsage;
     }
