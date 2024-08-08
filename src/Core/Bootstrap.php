@@ -16,8 +16,12 @@ final class Bootstrap
         ini_set('log_errors', 1);
 
         // Load environment variables
-        $dotenv = Dotenv::createImmutable($envPath);
-        $dotenv->load();
+        try {
+            $dotenv = Dotenv::createImmutable($envPath);
+            $dotenv->load();
+        } catch (\Throwable $e) {
+            exit('Failed to load environment variables. Please create a .env file in the root directory.');
+        }
         $dotenv->required(['DB_HOST', 'DB_NAME', 'DB_USER', 'DB_PASSWORD', 'DB_PORT']);
 
         // Check if debug mode is enabled
