@@ -19,10 +19,10 @@ final class Bootstrap
         try {
             $dotenv = Dotenv::createImmutable($envPath);
             $dotenv->load();
+            $dotenv->required(['DB_HOST', 'DB_NAME', 'DB_USER', 'DB_PASSWORD', 'DB_PORT']);
         } catch (\Throwable $e) {
-            exit('Failed to load environment variables. Please create a .env file in the root directory.');
+            exit($e->getMessage());
         }
-        $dotenv->required(['DB_HOST', 'DB_NAME', 'DB_USER', 'DB_PASSWORD', 'DB_PORT']);
 
         // Check if debug mode is enabled
         if (!isset($_ENV['DEBUG']) || $_ENV['DEBUG'] !== 'true') {
