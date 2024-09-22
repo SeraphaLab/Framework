@@ -14,6 +14,12 @@ final class DB
         $this->dbConnection = $dbConnection instanceof Sanite ? $dbConnection->getConnection() : $dbConnection;
     }
 
+    // Get the PDO connection
+    public function getConnection(): \PDO
+    {
+        return $this->dbConnection;
+    }
+
     // Create Operations
     public function create(string $query, string $bindTypes, array $data)
     {
