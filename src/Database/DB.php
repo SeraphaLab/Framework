@@ -21,11 +21,19 @@ final class DB
     }
 
     // Create Operations
-    public function create(string $query, string $bindTypes, array $data)
+    public function create(string $query, string $bindTypes, array $data, bool $getAutoIncrement = false)
     {
         $dataCreate = new DataCreate($this->dbConnection);
 
-        return $dataCreate->createSingle(['query' => $query, 'bind' => $bindTypes], $data);
+        return $dataCreate->createSingle(['query' => $query, 'bind' => $bindTypes], $data, $getAutoIncrement);
+    }
+
+    // Create multiple rows
+    public function createAll(string $query, string $bindTypes, array $data)
+    {
+        $dataCreate = new DataCreate($this->dbConnection);
+
+        return $dataCreate->createMultiple(['query' => $query, 'bind' => $bindTypes], $data);
     }
 
     // Read Operations
@@ -36,6 +44,14 @@ final class DB
         return $dataRead->readSingle(['query' => $query, 'bind' => $bindTypes], $conditions);
     }
 
+    // Read multiple rows
+    public function readAll(string $query, string $bindTypes, array $conditions = [])
+    {
+        $dataRead = new DataRead($this->dbConnection);
+
+        return $dataRead->readMultiple(['query' => $query, 'bind' => $bindTypes], $conditions);
+    }
+
     // Update Operations
     public function update(string $query, string $bindTypes, array $data)
     {
@@ -44,11 +60,27 @@ final class DB
         return $dataUpdate->updateSingle(['query' => $query, 'bind' => $bindTypes], $data);
     }
 
+    // Update multiple rows
+    public function updateAll(string $query, string $bindTypes, array $data)
+    {
+        $dataUpdate = new DataUpdate($this->dbConnection);
+
+        return $dataUpdate->updateMultiple(['query' => $query, 'bind' => $bindTypes], $data);
+    }
+
     // Delete Operations
     public function delete(string $query, string $bindTypes, array $conditions)
     {
         $dataDelete = new DataDelete($this->dbConnection);
 
         return $dataDelete->deleteSingle(['query' => $query, 'bind' => $bindTypes], $conditions);
+    }
+
+    // Delete multiple rows
+    public function deleteAll(string $query, string $bindTypes, array $conditions)
+    {
+        $dataDelete = new DataDelete($this->dbConnection);
+
+        return $dataDelete->deleteMultiple(['query' => $query, 'bind' => $bindTypes], $conditions);
     }
 }
