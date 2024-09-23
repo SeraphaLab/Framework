@@ -37,6 +37,6 @@ class RouteRegistrar
             return Route::addRoute($method, $uri, array_merge($this->attributes, ['uses' => $controller]));
         }
 
-        throw new \BadMethodCallException("Method {$method} does not exist.");
+        throw new \BadMethodCallException('Method {'.$method.'} does not exist.');
     }
 }

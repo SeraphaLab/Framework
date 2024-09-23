@@ -33,7 +33,7 @@ final class Container implements ContainerInterface
         try {
             return $this->resolve($id);
         } catch (\Exception $e) {
-            throw new ContainerException("No entry or class found for '{$id}'.", 0, $e);
+            throw new ContainerException('No entry or class found for \'{'.$id.'}\'.', 0, $e);
         }
     }
 
@@ -67,7 +67,7 @@ final class Container implements ContainerInterface
         $reflector = new ReflectionClass($concrete);
 
         if (!$reflector->isInstantiable()) {
-            throw new ContainerException("Class {$concrete} is not instantiable.");
+            throw new ContainerException('Class {'.$concrete.'} is not instantiable.');
         }
 
         $constructor = $reflector->getConstructor();
@@ -97,7 +97,7 @@ final class Container implements ContainerInterface
                 return $param->getDefaultValue();
             }
 
-            throw new ContainerException("Cannot resolve the dependency {$param->name}");
+            throw new ContainerException('Cannot resolve the dependency {'.$param->name.'}');
         }, $parameters);
 
         return $reflector->newInstanceArgs($dependencies);

@@ -12,7 +12,7 @@ final class Config
     public function __construct(string $configFilePath)
     {
         if (!file_exists($configFilePath)) {
-            throw new InitializationException("Configuration file does not exist: [{$configFilePath}]");
+            throw new InitializationException('Configuration file does not exist: ['.$configFilePath.']');
         }
         $this->config = require $configFilePath;
     }

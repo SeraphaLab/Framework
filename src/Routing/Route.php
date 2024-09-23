@@ -237,7 +237,7 @@ final class Route
         [$controllerName, $action] = self::parseController($controller);
 
         if (!class_exists($controllerName)) {
-            throw new RoutingException("Controller [$controllerName] not found");
+            throw new RoutingException('Controller ['.$controllerName.'] not found');
         }
 
         self::$controllerDispatcher->dispatch($controllerName, $action, $params);

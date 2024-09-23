@@ -74,7 +74,7 @@ final class Template
                 extract($data);
                 include($filepath);
             } else {
-                throw new TemplateException("Template file not found: $template");
+                throw new TemplateException('Template file not found: '.$template);
             }
         }
     }

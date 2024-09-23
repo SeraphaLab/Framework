@@ -22,7 +22,7 @@ final class Dispatcher
         $reflector = new ReflectionClass($class);
 
         if (!$reflector->isInstantiable()) {
-            throw new DispatcherException("Class {$class} is not instantiable.");
+            throw new DispatcherException('Class {'.$class.'} is not instantiable.');
         }
 
         $instance = $reflector->newInstanceWithoutConstructor();
@@ -65,7 +65,7 @@ final class Dispatcher
                     return $param->getDefaultValue();
                 }
 
-                throw new DispatcherException("Cannot resolve the dependency {$param->name}");
+                throw new DispatcherException('Cannot resolve the dependency {'.$param->name.'}');
             }, $parameters);
 
             $constructor->invokeArgs($instance, $dependencies);
