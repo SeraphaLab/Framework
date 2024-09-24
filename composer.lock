@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "carry0987/i18n",
-            "version": "2.1.4",
+            "version": "2.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/carry0987/PHP-I18n.git",
-                "reference": "ddd7208f349d2ab5119ef9e210d11391dc7638f5"
+                "reference": "ceb1c6f5b6ff01e8ef0918570bebc9c3e5efb31f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/carry0987/PHP-I18n/zipball/ddd7208f349d2ab5119ef9e210d11391dc7638f5",
-                "reference": "ddd7208f349d2ab5119ef9e210d11391dc7638f5",
+                "url": "https://api.github.com/repos/carry0987/PHP-I18n/zipball/ceb1c6f5b6ff01e8ef0918570bebc9c3e5efb31f",
+                "reference": "ceb1c6f5b6ff01e8ef0918570bebc9c3e5efb31f",
                 "shasum": ""
             },
             "require": {
@@ -47,9 +47,9 @@
             ],
             "support": {
                 "issues": "https://github.com/carry0987/PHP-I18n/issues",
-                "source": "https://github.com/carry0987/PHP-I18n/tree/2.1.4"
+                "source": "https://github.com/carry0987/PHP-I18n/tree/2.1.5"
             },
-            "time": "2024-07-21T14:39:55+00:00"
+            "time": "2024-09-19T19:05:39+00:00"
         },
         {
             "name": "carry0987/redis-tool",
@@ -137,16 +137,16 @@
         },
         {
             "name": "carry0987/template-engine",
-            "version": "1.3.9",
+            "version": "1.3.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/carry0987/TemplateEngine.git",
-                "reference": "403c4e4dba513076b0dcc067dd96b5c5f494b353"
+                "reference": "29365191a9c98fac6fdac0ee0be29bbf62c93cea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/carry0987/TemplateEngine/zipball/403c4e4dba513076b0dcc067dd96b5c5f494b353",
-                "reference": "403c4e4dba513076b0dcc067dd96b5c5f494b353",
+                "url": "https://api.github.com/repos/carry0987/TemplateEngine/zipball/29365191a9c98fac6fdac0ee0be29bbf62c93cea",
+                "reference": "29365191a9c98fac6fdac0ee0be29bbf62c93cea",
                 "shasum": ""
             },
             "require": {
@@ -178,9 +178,9 @@
             ],
             "support": {
                 "issues": "https://github.com/carry0987/TemplateEngine/issues",
-                "source": "https://github.com/carry0987/TemplateEngine/tree/1.3.9"
+                "source": "https://github.com/carry0987/TemplateEngine/tree/1.3.10"
             },
-            "time": "2024-07-29T05:17:33+00:00"
+            "time": "2024-09-23T13:59:56+00:00"
         },
         {
             "name": "carry0987/utils",
@@ -285,16 +285,16 @@
         },
         {
             "name": "httpsoft/http-message",
-            "version": "1.1.5",
+            "version": "1.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/httpsoft/http-message.git",
-                "reference": "e0c57307e0106ae6489f0b13ddd7947e9b027662"
+                "reference": "f6c88e2189b9f75f10dfaeb0a85c56ea04a53c19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/httpsoft/http-message/zipball/e0c57307e0106ae6489f0b13ddd7947e9b027662",
-                "reference": "e0c57307e0106ae6489f0b13ddd7947e9b027662",
+                "url": "https://api.github.com/repos/httpsoft/http-message/zipball/f6c88e2189b9f75f10dfaeb0a85c56ea04a53c19",
+                "reference": "f6c88e2189b9f75f10dfaeb0a85c56ea04a53c19",
                 "shasum": ""
             },
             "require": {
@@ -344,7 +344,7 @@
                 "issues": "https://github.com/httpsoft/http-message/issues",
                 "source": "https://github.com/httpsoft/http-message"
             },
-            "time": "2024-05-27T08:36:34+00:00"
+            "time": "2024-08-09T07:13:21+00:00"
         },
         {
             "name": "httpsoft/http-server-request",
@@ -644,20 +644,20 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.30.0",
+            "version": "v1.31.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
-                "reference": "0424dff1c58f028c451efff2045f5d92410bd540"
+                "reference": "a3cc8b044a6ea513310cbd48ef7333b384945638"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/0424dff1c58f028c451efff2045f5d92410bd540",
-                "reference": "0424dff1c58f028c451efff2045f5d92410bd540",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/a3cc8b044a6ea513310cbd48ef7333b384945638",
+                "reference": "a3cc8b044a6ea513310cbd48ef7333b384945638",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1"
+                "php": ">=7.2"
             },
             "provide": {
                 "ext-ctype": "*"
@@ -703,7 +703,7 @@
                 "portable"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.30.0"
+                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.31.0"
             },
             "funding": [
                 {
@@ -719,24 +719,24 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-05-31T15:07:36+00:00"
+            "time": "2024-09-09T11:45:10+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.30.0",
+            "version": "v1.31.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "fd22ab50000ef01661e2a31d850ebaa297f8e03c"
+                "reference": "85181ba99b2345b0ef10ce42ecac37612d9fd341"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/fd22ab50000ef01661e2a31d850ebaa297f8e03c",
-                "reference": "fd22ab50000ef01661e2a31d850ebaa297f8e03c",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/85181ba99b2345b0ef10ce42ecac37612d9fd341",
+                "reference": "85181ba99b2345b0ef10ce42ecac37612d9fd341",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1"
+                "php": ">=7.2"
             },
             "provide": {
                 "ext-mbstring": "*"
@@ -783,7 +783,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.30.0"
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.31.0"
             },
             "funding": [
                 {
@@ -799,24 +799,24 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-06-19T12:30:46+00:00"
+            "time": "2024-09-09T11:45:10+00:00"
         },
         {
             "name": "symfony/polyfill-php80",
-            "version": "v1.30.0",
+            "version": "v1.31.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php80.git",
-                "reference": "77fa7995ac1b21ab60769b7323d600a991a90433"
+                "reference": "60328e362d4c2c802a54fcbf04f9d3fb892b4cf8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/77fa7995ac1b21ab60769b7323d600a991a90433",
-                "reference": "77fa7995ac1b21ab60769b7323d600a991a90433",
+                "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/60328e362d4c2c802a54fcbf04f9d3fb892b4cf8",
+                "reference": "60328e362d4c2c802a54fcbf04f9d3fb892b4cf8",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1"
+                "php": ">=7.2"
             },
             "type": "library",
             "extra": {
@@ -863,7 +863,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-php80/tree/v1.30.0"
+                "source": "https://github.com/symfony/polyfill-php80/tree/v1.31.0"
             },
             "funding": [
                 {
@@ -879,7 +879,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-05-31T15:07:36+00:00"
+            "time": "2024-09-09T11:45:10+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
