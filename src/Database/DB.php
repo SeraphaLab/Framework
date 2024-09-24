@@ -52,6 +52,14 @@ final class DB
         return $dataRead->readMultiple(['query' => $query, 'bind' => $bindTypes], $conditions);
     }
 
+    // Count rows
+    public function count(string $query, string $bindTypes, array $conditions = [])
+    {
+        $dataRead = new DataRead($this->dbConnection);
+
+        return $dataRead->countData(['query' => $query, 'bind' => $bindTypes], $conditions);
+    }
+
     // Update Operations
     public function update(string $query, string $bindTypes, array $data)
     {

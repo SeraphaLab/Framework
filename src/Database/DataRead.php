@@ -16,4 +16,9 @@ final class DataRead extends DataReadModel
     {
         return $this->getMultipleData($queryArray, $dataArray);
     }
+
+    public function countData(array $queryArray, ?array $dataArray = null)
+    {
+        return $this->getDataCount($queryArray, $dataArray);
+    }
 }
