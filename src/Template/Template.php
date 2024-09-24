@@ -68,6 +68,10 @@ final class Template
         $data = $this->setData($data)->getData();
 
         foreach ($templates as $template) {
+            // Auto add html extension
+            if (!str_ends_with($template, '.html')) {
+                $template .= '.html';
+            }
             $filepath = $this->template->loadTemplate($template);
             if (file_exists($filepath)) {
                 // Import array key values as variable names into the current symbol table
