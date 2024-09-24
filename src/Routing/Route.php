@@ -116,6 +116,10 @@ final class Route
             $groupAttributes = end(self::$groupStack);
             foreach ($methods as $method) {
                 $groupUri = ($groupAttributes['prefix'] ?? '') . $uri;
+                // If the route is the root, use the group prefix itself
+                if ($uri === '/') {
+                    $groupUri = $groupAttributes['prefix'] ?? '/';
+                }
                 self::$routes[$method][$groupUri] = [
                     'controller' => $action instanceof Closure ? $action : ($action['uses'] ?? $action),
                     'middleware' => $action instanceof Closure ? [] : array_merge($groupAttributes['middleware'] ?? [], $action['middleware'] ?? [])
