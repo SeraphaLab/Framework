@@ -37,7 +37,7 @@ final class Template
     public function setData(string|array $data, mixed $value = null): self
     {
         if (is_array($data)) {
-            $this->data = array_merge($data, $this->data);
+            $this->data = array_merge($this->data, $data);
             return $this;
         }
 
