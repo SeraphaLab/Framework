@@ -12,9 +12,9 @@ class Handler
         $this->callback = $callback;
     }
 
-    public function handle(Request $request): Response
+    public function handle(Request $request, Response $response): Response
     {
-        $result = call_user_func($this->callback, $request);
+        $result = call_user_func($this->callback, $request, $response);
 
         if ($result instanceof Response) {
             return $result;
