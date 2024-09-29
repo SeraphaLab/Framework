@@ -37,7 +37,7 @@ final class DB
     }
 
     // Read Operations
-    public function read(string $query, string $bindTypes, array $conditions = [])
+    public function read(string $query, string $bindTypes, ?array $conditions = null)
     {
         $dataRead = new DataRead($this->dbConnection);
 
@@ -45,7 +45,7 @@ final class DB
     }
 
     // Read multiple rows
-    public function readAll(string $query, string $bindTypes, array $conditions = [])
+    public function readAll(string $query, string $bindTypes, ?array $conditions = null)
     {
         $dataRead = new DataRead($this->dbConnection);
 
@@ -53,7 +53,7 @@ final class DB
     }
 
     // Count rows
-    public function count(string $query, string $bindTypes, array $conditions = [])
+    public function count(string $query, string $bindTypes, ?array $conditions = null)
     {
         $dataRead = new DataRead($this->dbConnection);
 
