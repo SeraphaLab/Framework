@@ -53,16 +53,16 @@
         },
         {
             "name": "carry0987/redis-tool",
-            "version": "1.1.1",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/carry0987/PHP-Redis-Tool.git",
-                "reference": "3bedb937a0ba6b449565eca38453bae6c597dec9"
+                "reference": "08c02b6e41c924d442152b5dac2d95362c08033a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/carry0987/PHP-Redis-Tool/zipball/3bedb937a0ba6b449565eca38453bae6c597dec9",
-                "reference": "3bedb937a0ba6b449565eca38453bae6c597dec9",
+                "url": "https://api.github.com/repos/carry0987/PHP-Redis-Tool/zipball/08c02b6e41c924d442152b5dac2d95362c08033a",
+                "reference": "08c02b6e41c924d442152b5dac2d95362c08033a",
                 "shasum": ""
             },
             "require": {
@@ -89,9 +89,9 @@
             ],
             "support": {
                 "issues": "https://github.com/carry0987/PHP-Redis-Tool/issues",
-                "source": "https://github.com/carry0987/PHP-Redis-Tool/tree/1.1.1"
+                "source": "https://github.com/carry0987/PHP-Redis-Tool/tree/1.1.2"
             },
-            "time": "2024-01-27T18:35:28+00:00"
+            "time": "2024-09-29T10:31:25+00:00"
         },
         {
             "name": "carry0987/sanite",
