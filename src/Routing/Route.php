@@ -275,7 +275,7 @@ final class Route
     private static function notFound(I18n $i18n): void
     {
         http_response_code(404);
-        Utils::setHeader(['X-Powered-By', 'Serapha'], true);
+        Utils::setHeader('X-Powered-By: Serapha', true);
 
         echo $i18n->fetch('error.page_not_found');
     }
