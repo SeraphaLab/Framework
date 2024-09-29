@@ -6,6 +6,7 @@ namespace Serapha\Routing;
 use Serapha\Core\Container;
 use Serapha\Controller\ControllerDispatcher;
 use Serapha\Exception\RoutingException;
+use Serapha\Utils\Utils;
 use carry0987\I18n\I18n;
 use Closure;
 
@@ -274,6 +275,8 @@ final class Route
     private static function notFound(I18n $i18n): void
     {
         http_response_code(404);
+        Utils::setHeader(['X-Powered-By', 'Serapha'], true);
+
         echo $i18n->fetch('error.page_not_found');
     }
 }
