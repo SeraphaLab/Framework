@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Serapha\Core;
 
+use Serapha\Provider\Provider;
 use Serapha\Service\ServiceLocator;
 use Serapha\Model\ModelLocator;
 use Serapha\Template\Template;
@@ -18,11 +19,12 @@ use carry0987\SessionManager\SessionManager;
 final class Core
 {
     private Container $container;
+    private array $providers = [];
 
     public function __construct(array $coreConfig = [])
     {
         // Get configurations
-        [$configFile, $routePath, $langPath, $cachePath] = self::setConfig($coreConfig);
+        [$configFile, $providerFile, $routePath, $langPath, $cachePath] = self::setConfig($coreConfig);
 
         // Load configuration
         $config = new Config(Utils::trimPath('/'.$configFile));
@@ -59,6 +61,11 @@ final class Core
             'samesite' => 'Strict'
         ]));
         $this->container->singleton(Router::class, fn($container) => new Router($container, $routePath));
+
+        // Register providers
+        $this->registerProviderFile($providerFile);
+        // Boot providers
+        $this->bootProviders();
 
         // Register the container for loactor
         ServiceLocator::setContainer($this->container);
@@ -105,10 +112,33 @@ final class Core
         return $this->container;
     }
 
+    public function bootProviders(): void
+    {
+        foreach ($this->providers as $provider) {
+            $provider->boot();
+        }
+    }
+
+    private function registerProviderFile(string $providerFile): void
+    {
+        $providersConfig = require $providerFile;
+
+        foreach ($providersConfig as $providerClass) {
+            $this->registerProvider(new $providerClass($this->container));
+        }
+    }
+
+    private function registerProvider(Provider $provider): void
+    {
+        $provider->register();
+        $this->providers[] = $provider;
+    }
+
     private static function setConfig(array $coreConfig): array
     {
         // Initialize variables
         $configFile = dirname(__DIR__, 5).'/';
+        $providerFile = dirname(__DIR__, 5).'/';
         $routePath = dirname(__DIR__, 5).'/';
         $langPath = dirname(__DIR__, 5).'/';
         $cachePath = dirname(__DIR__, 5).'/';
@@ -119,6 +149,13 @@ final class Core
         } else {
             $configFile .= $_ENV['CONFIG_FILE'] ?? '/config/config.inc.php';
             $configFile = Utils::trimPath($configFile);
+        }
+
+        if (isset($coreConfig['providerFile'])) {
+            $providerFile = $coreConfig['providerFile'];
+        } else {
+            $providerFile .= $_ENV['PROVIDER_FILE'] ?? '/config/provider.inc.php';
+            $providerFile = Utils::trimPath($providerFile);
         }
 
         if (isset($coreConfig['routePath'])) {
@@ -142,7 +179,7 @@ final class Core
             $cachePath = Utils::trimPath($cachePath);
         }
 
-        return [$configFile, $routePath, $langPath, $cachePath];
+        return [$configFile, $providerFile, $routePath, $langPath, $cachePath];
     }
 
     private static function setRedis(Config $config): RedisTool
