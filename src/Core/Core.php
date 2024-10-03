@@ -13,7 +13,6 @@ use Serapha\Exception\InitializationException;
 use carry0987\Sanite\Sanite;
 use carry0987\I18n\I18n;
 use carry0987\Redis\RedisTool;
-use carry0987\SessionManager\SessionManager;
 
 final class Core
 {
@@ -53,11 +52,6 @@ final class Core
                 'domain' => '',
                 'httponly' => true
             ]
-        ]));
-        $this->container->singleton(SessionManager::class, fn() => new SessionManager(Utils::xxHash(Utils::getBasePath(0)), [
-            'path' => Utils::trimPath(Utils::getBasePath().'/'),
-            'secure' => Utils::checkHttps(),
-            'samesite' => 'Strict'
         ]));
         $this->container->singleton(Router::class, fn($container) => new Router($container, $routePath));
 

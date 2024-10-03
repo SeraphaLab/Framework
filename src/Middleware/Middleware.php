@@ -6,17 +6,9 @@ namespace Serapha\Middleware;
 use Serapha\Routing\Response;
 use Serapha\Routing\Request;
 use Serapha\Routing\Handler;
-use carry0987\SessionManager\SessionManager;
 
 abstract class Middleware
 {
-    protected SessionManager $sessionManager;
-
-    public function __construct(SessionManager $sessionManager)
-    {
-        $this->sessionManager = $sessionManager;
-    }
-
     /**
      * Process the request and response.
      *

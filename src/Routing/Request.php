@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Serapha\Routing;
 
-use Serapha\Utils\Utils;
 use HttpSoft\ServerRequest\ServerRequestCreator;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\StreamInterface;
