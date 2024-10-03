@@ -84,11 +84,8 @@ final class Core
         /** @var Router */
         $router = $this->container->get(Router::class);
 
-        // Capture the current request URI
-        $request = new Request();
-
         // Dispatch the query
-        $router->handleRequest($request->getRequestTarget());
+        $router->handleRequest(new Request());
     }
 
     /**
