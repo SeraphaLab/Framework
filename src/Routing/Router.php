@@ -17,9 +17,9 @@ final class Router
         Route::setControllerDispatcher(new ControllerDispatcher($this->container));
     }
 
-    public function handleRequest(Request $request): void
+    public function handleRequest(): void
     {
-        Route::dispatch($this->container, $request->getRequestTarget());
+        Route::dispatch($this->container);
     }
 
     private function loadRoutes(string $routePath): void

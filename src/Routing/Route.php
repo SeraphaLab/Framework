@@ -140,10 +140,10 @@ final class Route
         return self::where('');
     }
 
-    public static function dispatch(Container $container, string $query): void
+    public static function dispatch(Container $container): void
     {
         // Get query parameter from request
-        $path = self::getRouteUri($query);
+        $path = self::getRouteUri();
         $method = $_SERVER['REQUEST_METHOD'];
 
         // Get route information
@@ -165,29 +165,26 @@ final class Route
         }
     }
 
-    private static function getRouteURI(string $query): string
+    private static function getRouteURI(): string
     {
         // Extract the path information from the URI
-        $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+        $requestUri = $_SERVER['REQUEST_URI'] ?? '';
+        $baseUri = $_SERVER['SCRIPT_NAME'] ?? '';
 
         // Check if is in routing mode
-        if (strncmp($query, $scriptName, strlen($scriptName)) === 0) {
-            $uri = substr($query, strlen($scriptName));
-        } elseif (strncmp($query, dirname($scriptName), strlen(dirname($scriptName))) === 0) {
-            $uri = substr($query, strlen(dirname($scriptName)));
+        if (Utils::isRewriteEnabled()) {
+            $uri = strtok($requestUri, '?');
         } else {
-            $uri = $query;
+            if (strncmp($requestUri, $baseUri, strlen($baseUri)) === 0) {
+                $uri = substr($requestUri, strlen($baseUri));
+            } elseif (strncmp($requestUri, dirname($baseUri), strlen(dirname($baseUri))) === 0) {
+                $uri = substr($requestUri, strlen(dirname($baseUri)));
+            } else {
+                $uri = $requestUri;
+            }
         }
 
-        // Ensure the leading slash
-        $path = '/' . ltrim($uri, '/?');
-
-        // Remove query string from the path
-        if (strpos($path, '?') !== false) {
-            $path = substr($path, 0, strpos($path, '?'));
-        }
-
-        return $path;
+        return '/' . ltrim($uri, '/?');
     }
 
     private static function getRouteInfo(string $method, string $uri): array
