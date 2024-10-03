@@ -95,4 +95,38 @@ final class Utils extends BaseUtils
 
         return !$indexInRequest && !$directIndexUsage;
     }
+
+    /**
+     * Generate URL based on rewrite setting.
+     *
+     * @param string $path The path to append to the base URL.
+     * @return string The full URL.
+     */
+    public static function generateUrl(string $path): string
+    {
+        // Base URL path without scheme and host
+        $basePath = self::getBasePath();
+        $basePath = rtrim($basePath, '/');
+        $path = ltrim($path, '/');
+
+        // Check if rewrite is enabled
+        if (self::isRewriteEnabled()) {
+            return self::getBaseHost() . $basePath . '/' . $path;
+        } else {
+            return self::getBaseHost() . $basePath . '/public/?/' . $path;
+        }
+    }
+
+    /**
+     * Get Base Host URL.
+     *
+     * @return string
+     */
+    public static function getBaseHost(): string
+    {
+        $scheme = $_SERVER['REQUEST_SCHEME'] ?? 'http';
+        $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+
+        return $scheme . '://' . $host;
+    }
 }

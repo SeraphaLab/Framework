@@ -30,13 +30,15 @@ class Request implements ServerRequestInterface
     public function fullUrl(): string
     {
         $uri = $this->request->getUri();
-        return (string)$uri;
+
+        return (string) $uri;
     }
 
     // Get the URL without query string
     public function url(): string
     {
         $uri = $this->request->getUri();
+
         return $uri->getScheme().'://'.$uri->getHost().$uri->getPath();
     }
 

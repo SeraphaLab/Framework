@@ -88,7 +88,7 @@ final class Core
         $request = new Request();
 
         // Dispatch the query
-        $router->handleRequest($request->getUri()->getPath());
+        $router->handleRequest($request->getRequestTarget());
     }
 
     /**
