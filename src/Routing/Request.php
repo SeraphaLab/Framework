@@ -226,9 +226,4 @@ class Request implements ServerRequestInterface
     {
         return $this->request->withoutAttribute($name);
     }
-
-    public static function capture(): string
-    {
-        return $_SERVER['REQUEST_URI'] ?? '/';
-    }
 }
