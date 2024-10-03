@@ -20,12 +20,44 @@ class Request implements ServerRequestInterface
         $this->request = $creator->createFromGlobals();
     }
 
+    // Get the root URL for the request
+    public function root(): string
+    {
+        return rtrim($this->request->getUri()->getScheme().'://'.$this->request->getUri()->getHost(), '/');
+    }
+
+    // Get the full URL with query string
+    public function fullUrl(): string
+    {
+        $uri = $this->request->getUri();
+        return (string)$uri;
+    }
+
+    // Get the URL without query string
+    public function url(): string
+    {
+        $uri = $this->request->getUri();
+        return $uri->getScheme().'://'.$uri->getHost().$uri->getPath();
+    }
+
+    // Check if the request is AJAX
+    public function isAjax(): bool
+    {
+        return $this->request->getHeaderLine('X-Requested-With') === 'XMLHttpRequest';
+    }
+
+    // Check if the request is secure (HTTPS)
+    public function isSecure(): bool
+    {
+        return $this->request->getUri()->getScheme() === 'https';
+    }
+
     public function getProtocolVersion(): string
     {
         return $this->request->getProtocolVersion();
     }
 
-    public function withProtocolVersion(string $version): MessageInterface
+    public function withProtocolVersion(string $version): ServerRequestInterface
     {
         return $this->request->withProtocolVersion($version);
     }
@@ -100,7 +132,7 @@ class Request implements ServerRequestInterface
         return $this->request->getUri();
     }
 
-    public function withUri(UriInterface $uri, bool $preserveHost = false): RequestInterface
+    public function withUri(UriInterface $uri, bool $preserveHost = false): ServerRequestInterface
     {
         return $this->request->withUri($uri, $preserveHost);
     }
@@ -168,5 +200,10 @@ class Request implements ServerRequestInterface
     public function withoutAttribute(string $name): ServerRequestInterface
     {
         return $this->request->withoutAttribute($name);
+    }
+
+    public static function capture(): string
+    {
+        return $_SERVER['REQUEST_URI'] ?? '/';
     }
 }

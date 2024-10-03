@@ -58,6 +58,19 @@ final class Utils extends BaseUtils
     }
 
     /**
+     * Get the base path of the application.
+     *
+     * @param int $levels
+     * @return string
+     */
+    public static function getBasePath(int $levels = 2): string
+    {
+        if ($levels === 0) return $_SERVER['PHP_SELF'];
+
+        return dirname($_SERVER['PHP_SELF'], $levels);
+    }
+
+    /**
      * Determine if URL rewriting is enabled.
      *
      * @return bool

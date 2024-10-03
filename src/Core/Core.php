@@ -47,13 +47,13 @@ final class Core
             'cookie' => [
                 'name' => 'lang',
                 'expire' => time()+86400,
-                'path' => Utils::trimPath(dirname($_SERVER['PHP_SELF'], 2).'/'),
+                'path' => Utils::trimPath(Utils::getBasePath().'/'),
                 'domain' => '',
                 'httponly' => true
             ]
         ]));
-        $this->container->singleton(SessionManager::class, fn() => new SessionManager(Utils::xxHash($_SERVER['PHP_SELF']), [
-            'path' => Utils::trimPath(dirname($_SERVER['PHP_SELF'], 2).'/'),
+        $this->container->singleton(SessionManager::class, fn() => new SessionManager(Utils::xxHash(Utils::getBasePath(0)), [
+            'path' => Utils::trimPath(Utils::getBasePath().'/'),
             'secure' => Utils::checkHttps(),
             'samesite' => 'Strict'
         ]));
