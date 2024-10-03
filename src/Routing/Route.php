@@ -171,6 +171,11 @@ final class Route
         $requestUri = $_SERVER['REQUEST_URI'] ?? '';
         $baseUri = $_SERVER['SCRIPT_NAME'] ?? '';
 
+        // Check if the URL contains multiple question marks
+        if (substr_count($requestUri, '?') > 1) {
+            self::returnBadRequest();
+        }
+
         // Check if is in routing mode
         if (Utils::isRewriteEnabled()) {
             $uri = strtok($requestUri, '?');
@@ -182,6 +187,9 @@ final class Route
             } else {
                 $uri = $requestUri;
             }
+
+            // Remove query string from URI
+            $uri = explode('&', $uri)[0];
         }
 
         return '/' . ltrim($uri, '/?');
@@ -274,6 +282,14 @@ final class Route
         http_response_code(404);
         Utils::setHeader('X-Powered-By: Serapha', true);
 
-        echo $i18n->fetch('error.page_not_found');
+        exit($i18n->fetch('error.page_not_found'));
+    }
+
+    private static function returnBadRequest(): void
+    {
+        http_response_code(400);
+        Utils::setHeader('X-Powered-By: Serapha', true);
+
+        exit('URL contains multiple question marks');
     }
 }

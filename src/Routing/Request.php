@@ -21,28 +21,6 @@ class Request implements ServerRequestInterface
         $this->request = $creator->createFromGlobals();
     }
 
-    // Get query parameters handling rewrite or non-rewrite case
-    public function getEffectiveQueryParams(): array
-    {
-        $queryParams = [];
-        parse_str($this->request->getUri()->getQuery(), $queryParams);
-
-        if (!Utils::isRewriteEnabled()) {
-            // Remove first parameter which is part of the path in non-rewrite mode
-            $firstKey = null;
-            foreach ($queryParams as $key => $value) {
-                $firstKey = $key;
-                break;
-            }
-
-            if ($firstKey !== null && strpos($queryParams[$firstKey], '/') === 0) {
-                unset($queryParams[$firstKey]);
-            }
-        }
-
-        return $queryParams;
-    }
-
     // Get the root URL for the request
     public function root(): string
     {

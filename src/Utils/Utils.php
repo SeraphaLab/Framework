@@ -102,7 +102,7 @@ final class Utils extends BaseUtils
      * @param string $path The path to append to the base URL.
      * @return string The full URL.
      */
-    public static function generateUrl(string $path): string
+    public static function generateUrl(string $path = '/'): string
     {
         // Base URL path without scheme and host
         $basePath = self::getBasePath();
