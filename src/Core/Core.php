@@ -7,6 +7,7 @@ use Serapha\Service\ServiceLocator;
 use Serapha\Model\ModelLocator;
 use Serapha\Template\Template;
 use Serapha\Routing\Router;
+use Serapha\Routing\Request;
 use Serapha\Utils\Utils;
 use Serapha\Exception\InitializationException;
 use carry0987\Sanite\Sanite;
@@ -70,13 +71,17 @@ final class Core
      * @throws \InitializationException 
      * @throws \IOException 
      */
-    public function run(string $query = '/'): void
+    public function run(): void
     {
         // Get the router instance and dispatch the query
         /** @var Router */
         $router = $this->container->get(Router::class);
+
+        // Capture the current request URI
+        $request = new Request();
+
         // Dispatch the query
-        $router->handleRequest($query);
+        $router->handleRequest($request->getUri()->getPath());
     }
 
     /**
