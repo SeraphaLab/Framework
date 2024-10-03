@@ -91,7 +91,7 @@ final class Utils extends BaseUtils
         // Remove the query string from REQUEST_URI if it exists
         $requestPath = explode('?', $requestUri, 2)[0];
         $indexInRequest = strpos($requestPath, basename($scriptName)) !== false;
-        $directIndexUsage = preg_match('/\/(?:\/|\?)/', $requestUri, $matches);
+        $directIndexUsage = preg_match('/\/(?:\/|\?)\//', $requestUri, $matches);
 
         return !$indexInRequest && !$directIndexUsage;
     }
