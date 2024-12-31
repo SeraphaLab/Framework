@@ -348,16 +348,16 @@
         },
         {
             "name": "httpsoft/http-server-request",
-            "version": "1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/httpsoft/http-server-request.git",
-                "reference": "3d773c8bcaa1c44793d35842fcd82a9d5fd5f193"
+                "reference": "1bf1b5de71920f0f7a49c17adf77963765bffd20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/httpsoft/http-server-request/zipball/3d773c8bcaa1c44793d35842fcd82a9d5fd5f193",
-                "reference": "3d773c8bcaa1c44793d35842fcd82a9d5fd5f193",
+                "url": "https://api.github.com/repos/httpsoft/http-server-request/zipball/1bf1b5de71920f0f7a49c17adf77963765bffd20",
+                "reference": "1bf1b5de71920f0f7a49c17adf77963765bffd20",
                 "shasum": ""
             },
             "require": {
@@ -404,7 +404,7 @@
                 "issues": "https://github.com/httpsoft/http-server-request/issues",
                 "source": "https://github.com/httpsoft/http-server-request"
             },
-            "time": "2023-05-05T19:55:05+00:00"
+            "time": "2024-11-25T06:32:39+00:00"
         },
         {
             "name": "phpoption/phpoption",
