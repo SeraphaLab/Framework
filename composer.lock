@@ -8,21 +8,24 @@
     "packages": [
         {
             "name": "carry0987/i18n",
-            "version": "2.1.5",
+            "version": "2.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/carry0987/PHP-I18n.git",
-                "reference": "ceb1c6f5b6ff01e8ef0918570bebc9c3e5efb31f"
+                "reference": "11f92285c061b73541252f58f323962cd7dc58ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/carry0987/PHP-I18n/zipball/ceb1c6f5b6ff01e8ef0918570bebc9c3e5efb31f",
-                "reference": "ceb1c6f5b6ff01e8ef0918570bebc9c3e5efb31f",
+                "url": "https://api.github.com/repos/carry0987/PHP-I18n/zipball/11f92285c061b73541252f58f323962cd7dc58ff",
+                "reference": "11f92285c061b73541252f58f323962cd7dc58ff",
                 "shasum": ""
             },
             "require": {
                 "carry0987/utils": "^1.0",
                 "php": ">=8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^12.4"
             },
             "type": "library",
             "autoload": {
@@ -47,9 +50,9 @@
             ],
             "support": {
                 "issues": "https://github.com/carry0987/PHP-I18n/issues",
-                "source": "https://github.com/carry0987/PHP-I18n/tree/2.1.5"
+                "source": "https://github.com/carry0987/PHP-I18n/tree/2.1.6"
             },
-            "time": "2024-09-19T19:05:39+00:00"
+            "time": "2025-10-17T06:45:13+00:00"
         },
         {
             "name": "carry0987/redis-tool",
@@ -184,20 +187,23 @@
         },
         {
             "name": "carry0987/utils",
-            "version": "1.0.9",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/carry0987/PHP-Utils.git",
-                "reference": "769c75d9b40bb1fa01a3bbc2070b9e0d19296ca4"
+                "reference": "4a04aa7c08c780631311f897281c8c17523daf86"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/carry0987/PHP-Utils/zipball/769c75d9b40bb1fa01a3bbc2070b9e0d19296ca4",
-                "reference": "769c75d9b40bb1fa01a3bbc2070b9e0d19296ca4",
+                "url": "https://api.github.com/repos/carry0987/PHP-Utils/zipball/4a04aa7c08c780631311f897281c8c17523daf86",
+                "reference": "4a04aa7c08c780631311f897281c8c17523daf86",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^12.4"
             },
             "type": "library",
             "autoload": {
@@ -217,9 +223,9 @@
             "description": "This Utils library provides a collection of static methods designed to help in various common tasks encountered in PHP development. From manipulating arrays and strings to handling date-time conversions and file paths, this library aims to be a handy tool for PHP developers.",
             "support": {
                 "issues": "https://github.com/carry0987/PHP-Utils/issues",
-                "source": "https://github.com/carry0987/PHP-Utils/tree/1.0.9"
+                "source": "https://github.com/carry0987/PHP-Utils/tree/1.1.0"
             },
-            "time": "2024-07-21T14:52:46+00:00"
+            "time": "2025-10-17T05:28:34+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -408,16 +414,16 @@
         },
         {
             "name": "phpoption/phpoption",
-            "version": "1.9.3",
+            "version": "1.9.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/schmittjoh/php-option.git",
-                "reference": "e3fac8b24f56113f7cb96af14958c0dd16330f54"
+                "reference": "638a154f8d4ee6a5cfa96d6a34dfbe0cffa9566d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/php-option/zipball/e3fac8b24f56113f7cb96af14958c0dd16330f54",
-                "reference": "e3fac8b24f56113f7cb96af14958c0dd16330f54",
+                "url": "https://api.github.com/repos/schmittjoh/php-option/zipball/638a154f8d4ee6a5cfa96d6a34dfbe0cffa9566d",
+                "reference": "638a154f8d4ee6a5cfa96d6a34dfbe0cffa9566d",
                 "shasum": ""
             },
             "require": {
@@ -425,7 +431,7 @@
             },
             "require-dev": {
                 "bamarni/composer-bin-plugin": "^1.8.2",
-                "phpunit/phpunit": "^8.5.39 || ^9.6.20 || ^10.5.28"
+                "phpunit/phpunit": "^8.5.44 || ^9.6.25 || ^10.5.53 || ^11.5.34"
             },
             "type": "library",
             "extra": {
@@ -467,7 +473,7 @@
             ],
             "support": {
                 "issues": "https://github.com/schmittjoh/php-option/issues",
-                "source": "https://github.com/schmittjoh/php-option/tree/1.9.3"
+                "source": "https://github.com/schmittjoh/php-option/tree/1.9.4"
             },
             "funding": [
                 {
@@ -479,7 +485,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-07-20T21:41:07+00:00"
+            "time": "2025-08-21T11:53:16+00:00"
         },
         {
             "name": "psr/container",
@@ -644,7 +650,7 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.32.0",
+            "version": "v1.33.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
@@ -703,7 +709,7 @@
                 "portable"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.32.0"
+                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.33.0"
             },
             "funding": [
                 {
@@ -715,6 +721,10 @@
                     "type": "github"
                 },
                 {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
                     "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
                     "type": "tidelift"
                 }
@@ -723,7 +733,7 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.32.0",
+            "version": "v1.33.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
@@ -784,7 +794,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.32.0"
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.33.0"
             },
             "funding": [
                 {
@@ -796,6 +806,10 @@
                     "type": "github"
                 },
                 {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
                     "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
                     "type": "tidelift"
                 }
@@ -804,7 +818,7 @@
         },
         {
             "name": "symfony/polyfill-php80",
-            "version": "v1.32.0",
+            "version": "v1.33.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php80.git",
@@ -864,7 +878,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-php80/tree/v1.32.0"
+                "source": "https://github.com/symfony/polyfill-php80/tree/v1.33.0"
             },
             "funding": [
                 {
@@ -873,6 +887,10 @@
                 },
                 {
                     "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
                     "type": "github"
                 },
                 {
