@@ -13,7 +13,7 @@ jobs:
       message: ${{ env.TAG_MESSAGE }}
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ github.ref_name }}
           fetch-depth: 0 # Fetch all history for all tags and branches
@@ -37,7 +37,7 @@ jobs:
       contents: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Create Release
         uses: ncipollo/release-action@v1
