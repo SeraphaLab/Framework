@@ -33,6 +33,7 @@ final class Core
         // Register dependencies in the container
         $this->container->singleton(Config::class, fn() => $config);
         $this->container->singleton(Sanite::class, fn() => new Sanite([
+            'driver' => $config->get('DB_DRIVER'),
             'host' => $config->get('DB_HOST'),
             'database' => $config->get('DB_NAME'),
             'username' => $config->get('DB_USER'),

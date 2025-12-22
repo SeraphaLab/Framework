@@ -21,11 +21,11 @@ final class DB
     }
 
     // Create Operations
-    public function create(string $query, string $bindTypes, array $data, bool $getAutoIncrement = false)
+    public function create(string $query, string $bindTypes, array $data, bool $getAutoIncrement = false, ?string $sequenceName = null)
     {
         $dataCreate = new DataCreate($this->dbConnection);
 
-        return $dataCreate->createSingle(['query' => $query, 'bind' => $bindTypes], $data, $getAutoIncrement);
+        return $dataCreate->createSingle(['query' => $query, 'bind' => $bindTypes], $data, $getAutoIncrement, $sequenceName);
     }
 
     // Create multiple rows
