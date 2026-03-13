@@ -10,7 +10,7 @@ final class Bootstrap
     public static function init(string $envPath): void
     {
         // Set error reporting
-        error_reporting(E_ALL | E_STRICT);
+        error_reporting(E_ALL);
         ini_set('display_errors', 1);
         ini_set('display_startup_errors', 1);
         ini_set('log_errors', 1);
