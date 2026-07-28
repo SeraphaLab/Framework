@@ -27,7 +27,7 @@ jobs:
         uses: carry0987/version-extractor@v1
         id: meta
         with:
-          tag: ${{ steps.release.outputs.tag_name || github.ref_name }}
+          tag: ${{ steps.release.outputs.version || github.ref_name }}
 
   build:
     needs: release-please
