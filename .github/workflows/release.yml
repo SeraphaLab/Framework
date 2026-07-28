@@ -1,52 +1,45 @@
-name: Create Release
+name: Release
 
 on:
   push:
-    tags:
-      - '*' # Push events to matching *, i.e. 1.0, 20.15.10
+    branches: [main, master]
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
-  release-note:
+  release-please:
     runs-on: ubuntu-latest
     outputs:
-      version: ${{ env.VERSION }}
-      message: ${{ env.TAG_MESSAGE }}
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+      version: ${{ steps.release.outputs.version }}
+      sha: ${{ steps.release.outputs.sha }}
+      body: ${{ steps.release.outputs.body }}
     steps:
-      - name: Check out the repo
-        uses: actions/checkout@v6
+      - uses: googleapis/release-please-action@v5
+        id: release
         with:
-          ref: ${{ github.ref_name }}
-          fetch-depth: 0 # Fetch all history for all tags and branches
-
-      - name: Get Release Notes
-        run: |
-          TAG_MESSAGE=$(git tag -l --format="%(contents:subject)" ${{ github.ref_name }})
-          echo "Release message: "$TAG_MESSAGE
-          echo "TAG_MESSAGE=$TAG_MESSAGE" >> $GITHUB_ENV
-
-      - name: Get update version
-        run: |
-          VERSION=${GITHUB_REF#refs/tags/}
-          echo "New version: $VERSION"
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          release-type: go
 
   build:
-    needs: release-note
+    needs: release-please
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ needs.release-note.outputs.version }}
-          name: ${{ needs.release-note.outputs.version }}
+          tag: ${{ needs.release-please.outputs.version }}
+          name: ${{ needs.release-please.outputs.version }}
           body: |
-            ${{ needs.release-note.outputs.message }}
+            ${{ needs.release-please.outputs.body }}
           draft: false
           prerelease: false
           omitDraftDuringUpdate: true
