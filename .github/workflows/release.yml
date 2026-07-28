@@ -21,19 +21,18 @@ jobs:
       - uses: googleapis/release-please-action@v5
         id: release
         with:
-          release-type: go
+          release-type: php
 
   build:
     needs: release-please
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
 
       - name: Create Release
         uses: ncipollo/release-action@v1
+        if: ${{ needs.release-please.outputs.release_created == 'true' }}
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ needs.release-please.outputs.version }}
