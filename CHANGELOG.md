@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.13](https://github.com/SeraphaLab/Framework/compare/1.2.12...1.2.13) (2026-07-28)
+
+
+### Bug Fixes
+
+* **CI:** Use manifest mode for release ([69635da](https://github.com/SeraphaLab/Framework/commit/69635da43461e4830aa5d497c35e6703394fbb84))
+
 ## [1.2.12](https://github.com/SeraphaLab/Framework/compare/1.2.11...v1.2.12) (2026-07-28)
 
 
