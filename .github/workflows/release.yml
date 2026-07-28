@@ -14,38 +14,9 @@ jobs:
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
       tag_name: ${{ steps.release.outputs.tag_name }}
-      version: ${{ steps.meta.outputs.version-number }}
+      version: ${{ steps.release.outputs.version }}
       sha: ${{ steps.release.outputs.sha }}
       body: ${{ steps.release.outputs.body }}
     steps:
       - uses: googleapis/release-please-action@v5
         id: release
-        with:
-          release-type: php
-
-      - name: Extract version from tag
-        uses: carry0987/version-extractor@v1
-        id: meta
-        if: ${{ steps.release.outputs.release_created == 'true' }}
-        with:
-          tag: ${{ steps.release.outputs.version }}
-
-  build:
-    needs: release-please
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-
-      - name: Create Release
-        uses: ncipollo/release-action@v1
-        if: ${{ needs.release-please.outputs.release_created == 'true' }}
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ needs.release-please.outputs.version }}
-          name: ${{ needs.release-please.outputs.version }}
-          body: |
-            ${{ needs.release-please.outputs.body }}
-          draft: false
-          prerelease: false
-          omitDraftDuringUpdate: true
