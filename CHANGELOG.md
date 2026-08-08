@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.14](https://github.com/SeraphaLab/Framework/compare/1.2.13...1.2.14) (2026-08-08)
+
+
+### Bug Fixes
+
+* **core:** tighten container typing and stabilize dispatcher initialization ([774fc4e](https://github.com/SeraphaLab/Framework/commit/774fc4eaa373c4e3c6e1fc43b27c2bdeb0b31e05))
+
 ## [1.2.13](https://github.com/SeraphaLab/Framework/compare/1.2.12...1.2.13) (2026-07-28)
 
 
