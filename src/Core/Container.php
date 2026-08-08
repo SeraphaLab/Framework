@@ -14,7 +14,14 @@ final class Container implements ContainerInterface
     private array $bindings = [];
     private array $instances = [];
 
-    public function bind(string $abstract, $concrete = null, $shared = false)
+    /**
+     * Register a binding in the container.
+     *
+     * @param string $abstract
+     * @param string|\Closure|null $concrete Class name to instantiate, factory closure, or null to use $abstract.
+     * @param bool $shared
+     */
+    public function bind(string $abstract, string|\Closure|null $concrete = null, bool $shared = false): void
     {
         if (is_null($concrete)) {
             $concrete = $abstract;
@@ -23,7 +30,13 @@ final class Container implements ContainerInterface
         $this->bindings[$abstract] = compact('concrete', 'shared');
     }
 
-    public function singleton(string $abstract, $concrete = null)
+    /**
+     * Register a shared binding in the container.
+     *
+     * @param string $abstract
+     * @param string|\Closure|null $concrete Class name to instantiate, factory closure, or null to use $abstract.
+     */
+    public function singleton(string $abstract, string|\Closure|null $concrete = null): void
     {
         $this->bind($abstract, $concrete, true);
     }
@@ -58,7 +71,13 @@ final class Container implements ContainerInterface
         return $object;
     }
 
-    private function build($concrete)
+    /**
+     * Build a concrete instance from a class name or factory closure.
+     *
+     * @param string|\Closure $concrete
+     * @return mixed
+     */
+    private function build(string|\Closure $concrete): mixed
     {
         if ($concrete instanceof \Closure) {
             return $concrete($this);

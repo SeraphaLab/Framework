@@ -5,6 +5,9 @@ namespace Serapha\Routing;
 
 class Handler
 {
+    /**
+     * @var callable(Request, Response): mixed
+     */
     private $callback;
 
     public function __construct(callable $callback)

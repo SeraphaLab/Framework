@@ -33,6 +33,8 @@ final class Template
     /**
      * Set data for the template engine.
      * @param array|string $data
+     * @param mixed $value
+     * @return self
      */
     public function setData(string|array $data, mixed $value = null): self
     {
@@ -48,7 +50,7 @@ final class Template
 
     /**
      * Get data from the template engine.
-     * @param string $key
+     * @param string|null $key
      * @return mixed
      */
     public function getData(?string $key = null): mixed
@@ -86,7 +88,7 @@ final class Template
     /**
      * Set options for the template engine.
      * @param array $options
-     * @return void
+     * @return self
      */
     public function setOption(array $options): self
     {
@@ -98,7 +100,7 @@ final class Template
     /**
      * Set the path to the assets.
      * @param callable $holder
-     * @return void
+     * @return self
      */
     public function assetPath(callable $holder): self
     {

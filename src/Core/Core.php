@@ -68,9 +68,6 @@ final class Core
 
     /**
      * Run the application.
-     * @return void 
-     * @throws \InitializationException 
-     * @throws \IOException 
      */
     public function run(): void
     {

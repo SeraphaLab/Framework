@@ -8,7 +8,7 @@ use Serapha\Database\DB;
 abstract class Model
 {
     protected DB $db;
-    protected static $param = [];
+    protected static array $param = [];
 
     public function __construct(DB $db)
     {
@@ -25,7 +25,7 @@ abstract class Model
         self::$param[$key] = $value;
     }
 
-    public static function getParam(string $key = null)
+    public static function getParam(?string $key = null): mixed
     {
         return $key ? self::$param[$key] : self::$param;
     }

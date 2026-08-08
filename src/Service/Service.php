@@ -25,7 +25,7 @@ abstract class Service
         self::$param[$key] = $value;
     }
 
-    public static function getParam(string $key = null)
+    public static function getParam(?string $key = null)
     {
         return $key ? self::$param[$key] : self::$param;
     }

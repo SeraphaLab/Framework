@@ -5,12 +5,13 @@ namespace Serapha\Core;
 
 use Serapha\Exception\DispatcherException;
 use ReflectionClass;
+use ReflectionNamedType;
 use ReflectionParameter;
+use ReflectionUnionType;
 
 final class Dispatcher
 {
     protected Container $container;
-    private array $initializedClasses = [];
 
     public function __construct(Container $container)
     {
@@ -26,21 +27,22 @@ final class Dispatcher
         }
 
         $instance = $reflector->newInstanceWithoutConstructor();
+        $initializedClasses = [];
 
         // Initialize properties defined by the parent class
-        $this->initializeClass($class, $instance);
+        $this->initializeClass($class, $instance, $initializedClasses);
 
         return $instance;
     }
 
-    protected function initializeClass(string $class, $instance)
+    protected function initializeClass(string $class, object $instance, array &$initializedClasses): void
     {
         $reflector = new ReflectionClass($class);
 
         if ($reflector->getParentClass()) {
             $parentClass = $reflector->getParentClass()->getName();
             if ($parentClass) {
-                $this->initializeClass($parentClass, $instance);
+                $this->initializeClass($parentClass, $instance, $initializedClasses);
             }
         }
 
@@ -50,15 +52,23 @@ final class Dispatcher
 
             // Check if the class has been initialized
             $className = $constructor->getDeclaringClass()->getName();
-            if (isset($this->initializedClasses[$className])) {
+            if (isset($initializedClasses[$className])) {
                 return;
             }
-            $this->initializedClasses[$className] = $instance;
+            $initializedClasses[$className] = true;
 
             // Resolve dependencies
             $dependencies = array_map(function (ReflectionParameter $param) {
-                if ($param->getType() && !$param->getType()->isBuiltin()) {
-                    return $this->container->get($param->getType()->getName());
+                $paramType = $param->getType();
+
+                if ($paramType instanceof ReflectionUnionType) {
+                    foreach ($paramType->getTypes() as $unionedType) {
+                        if (!$unionedType->isBuiltin()) {
+                            return $this->container->get($unionedType->getName());
+                        }
+                    }
+                } elseif ($paramType instanceof ReflectionNamedType && !$paramType->isBuiltin()) {
+                    return $this->container->get($paramType->getName());
                 }
 
                 if ($param->isDefaultValueAvailable()) {
