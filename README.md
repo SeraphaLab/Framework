@@ -1,5 +1,6 @@
 # Serapha-Framework
 [![Packgist](https://img.shields.io/packagist/v/serapha/framework.svg?style=flat-square)](https://packagist.org/packages/serapha/framework)  
+![CI](https://github.com/SeraphaLab/Framework/actions/workflows/php-unit.yml/badge.svg)  
 The framework library of Serapha
 
 ## Installation
