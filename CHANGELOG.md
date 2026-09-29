@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.15](https://github.com/SeraphaLab/Framework/compare/1.2.14...1.2.15) (2026-09-29)
+
+
+### Bug Fixes
+
+* **ci:** test minimum supported PHP version ([e08947c](https://github.com/SeraphaLab/Framework/commit/e08947c1f6dc06f1a3800b3d6d7c9cd7bbbf91ed))
+
+
+### Miscellaneous Chores
+
+* **deps:** update dependency constraints ([d8d8afb](https://github.com/SeraphaLab/Framework/commit/d8d8afb57860661f9f732bb2fc0280da7f69a12c))
+
 ## [1.2.14](https://github.com/SeraphaLab/Framework/compare/1.2.13...1.2.14) (2026-08-08)
 
 
