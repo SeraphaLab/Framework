@@ -5,6 +5,7 @@ namespace Serapha\Controller;
 
 use Serapha\Core\Container;
 use Serapha\Core\Dispatcher;
+use Serapha\Routing\Response;
 
 final class ControllerDispatcher
 {
@@ -15,7 +16,7 @@ final class ControllerDispatcher
         $this->dispatcher = new Dispatcher($container);
     }
 
-    public function dispatch(string $controller, string $method, array $parameters)
+    public function dispatch(string $controller, string $method, array $parameters): Response
     {
         $instance = $this->dispatcher->resolve($controller);
 

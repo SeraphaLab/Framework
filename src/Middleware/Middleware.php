@@ -36,18 +36,6 @@ abstract class Middleware
     }
 
     /**
-     * Create a new redirect response to the given URL.
-     *
-     * @param string $url
-     * @param int $statusCode
-     * @return Response
-     */
-    protected function redirect(string $url, int $statusCode = 302): Response
-    {
-        return $this->createResponse($statusCode)->withHeader('Location', $url);
-    }
-
-    /**
      * Get a specific header value from the request.
      *
      * @param Request $request

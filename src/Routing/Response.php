@@ -7,7 +7,6 @@ use HttpSoft\Message\Response as BaseResponse;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
-use Serapha\Utils\Utils;
 
 class Response implements ResponseInterface
 {
@@ -111,23 +110,17 @@ class Response implements ResponseInterface
         return $newInstance;
     }
 
-    /**
-     * Redirect to a given URL considering the current directory of the site.
-     *
-     * @param string $url
-     * @param int $status
-     * @return void
-     */
-    public function redirect(string $url, ?int $status = 302): void
+    public function withRedirect(string $uri, int $statusCode = 302): self
     {
-        // Construct the query parameter part
-        $queryUrl = Utils::isRewriteEnabled() ? '' : '?/';
-        $queryUrl .= Utils::trimPath($url);
-        // Get the base directory of the script
-        $baseDir = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
-        // Construct the full URL with the query parameter
-        $redirectUrl = Utils::trimPath($baseDir . '/' . $queryUrl);
-        // Perform the redirection
-        Utils::redirectURL($redirectUrl, $status);
+        if ($statusCode < 300 || $statusCode >= 400) {
+            throw new \InvalidArgumentException('A redirect status code must be in the 3xx range.');
+        }
+
+        $newInstance = clone $this;
+        $newInstance->response = $this->response
+            ->withStatus($statusCode)
+            ->withHeader('Location', $uri);
+
+        return $newInstance;
     }
 }

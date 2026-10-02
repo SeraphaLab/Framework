@@ -6,6 +6,7 @@ namespace Serapha\Tests\Integration;
 use PHPUnit\Framework\TestCase;
 use Serapha\Controller\ControllerDispatcher;
 use Serapha\Core\Container;
+use Serapha\Routing\Response;
 
 final class ControllerDispatcherTest extends TestCase
 {
@@ -15,7 +16,7 @@ final class ControllerDispatcherTest extends TestCase
 
         $result = $dispatcher->dispatch(ControllerDispatchChild::class, 'show', ['ok']);
 
-        self::assertSame('base:ready-child:ready-ok', $result);
+        self::assertSame('base:ready-child:ready-ok', (string) $result->getBody());
     }
 }
 
@@ -38,14 +39,17 @@ final class ControllerDispatchChild extends ControllerDispatchBase
         $this->childReady = $this->baseReady && $dependency instanceof ControllerDispatchChildDependency;
     }
 
-    public function show(string $value): string
+    public function show(string $value): Response
     {
-        return sprintf(
+        $response = new Response();
+        $response->getBody()->write(sprintf(
             'base:%s-child:%s-%s',
             $this->baseReady ? 'ready' : 'missing',
             $this->childReady ? 'ready' : 'missing',
             $value
-        );
+        ));
+
+        return $response;
     }
 }
 

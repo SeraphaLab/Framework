@@ -140,8 +140,15 @@ final class Route
         return self::where('');
     }
 
-    public static function dispatch(Container $container): void
+    public static function dispatch(Container $container, ?ResponseEmitter $emitter = null): void
     {
+        $emitter ??= new ResponseEmitter();
+
+        if (substr_count($_SERVER['REQUEST_URI'] ?? '', '?') > 1) {
+            $emitter->emit(self::badRequest());
+            return;
+        }
+
         // Get query parameter from request
         $path = self::getRouteUri();
         $method = $_SERVER['REQUEST_METHOD'];
@@ -153,15 +160,13 @@ final class Route
             $request = new Request();
             $response = new Response();
 
-            $response = self::processMiddleware($container, $middleware, $request, $response, function ($req, $res) use ($controller, $params) {
-                self::invokeController($controller, $params);
-                return $res;
+            $response = self::processMiddleware($container, $middleware, $request, $response, function (Request $request, Response $response) use ($controller, $params): Response {
+                return self::invokeController($controller, $params);
             });
 
-            echo $response->getBody();
+            $emitter->emit($response);
         } else {
-            // Route not found
-            self::notFound($container->get(I18n::class));
+            $emitter->emit(self::notFound($container->get(I18n::class)));
         }
     }
 
@@ -170,11 +175,6 @@ final class Route
         // Extract the path information from the URI
         $requestUri = $_SERVER['REQUEST_URI'] ?? '';
         $baseUri = $_SERVER['SCRIPT_NAME'] ?? '';
-
-        // Check if the URL contains multiple question marks
-        if (substr_count($requestUri, '?') > 1) {
-            self::returnBadRequest();
-        }
 
         // Check if is in routing mode
         if (Utils::isRewriteEnabled()) {
@@ -236,12 +236,10 @@ final class Route
         return [$controllerName, $action];
     }
 
-    private static function invokeController(string|array|callable $controller, array $params): void
+    private static function invokeController(string|array|callable $controller, array $params): Response
     {
         if ($controller instanceof Closure) {
-            // Call the closure directly
-            call_user_func_array($controller, $params);
-            return;
+            return call_user_func_array($controller, $params);
         }
 
         [$controllerName, $action] = self::parseController($controller);
@@ -250,7 +248,7 @@ final class Route
             throw new RoutingException('Controller ['.$controllerName.'] not found');
         }
 
-        self::$controllerDispatcher->dispatch($controllerName, $action, $params);
+        return self::$controllerDispatcher->dispatch($controllerName, $action, $params);
     }
 
     private static function processMiddleware(Container $container, array $middleware, Request $request, Response $response, callable $next): Response
@@ -277,19 +275,21 @@ final class Route
         return $pattern;
     }
 
-    private static function notFound(I18n $i18n): void
+    private static function notFound(I18n $i18n): Response
     {
-        http_response_code(404);
-        Utils::setHeader('X-Powered-By: Serapha', true);
-
-        exit($i18n->fetch('error.page_not_found'));
+        return self::errorResponse(404, $i18n->fetch('error.page_not_found'));
     }
 
-    private static function returnBadRequest(): void
+    private static function badRequest(): Response
     {
-        http_response_code(400);
-        Utils::setHeader('X-Powered-By: Serapha', true);
+        return self::errorResponse(400, 'URL contains multiple question marks');
+    }
 
-        exit('URL contains multiple question marks');
+    private static function errorResponse(int $statusCode, string $body): Response
+    {
+        $response = new Response($statusCode, ['X-Powered-By' => 'Serapha']);
+        $response->getBody()->write($body);
+
+        return $response;
     }
 }

@@ -6,7 +6,7 @@ namespace Serapha\Routing;
 class Handler
 {
     /**
-     * @var callable(Request, Response): mixed
+     * @var callable(Request, Response): Response
      */
     private $callback;
 
@@ -17,12 +17,6 @@ class Handler
 
     public function handle(Request $request, Response $response): Response
     {
-        $result = call_user_func($this->callback, $request, $response);
-
-        if ($result instanceof Response) {
-            return $result;
-        }
-
-        return new Response();
+        return call_user_func($this->callback, $request, $response);
     }
 }
