@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/SeraphaLab/Framework/compare/1.2.15...1.3.0) (2026-10-02)
+
+
+### Features
+
+* **routing:** add response pipeline ([bc19e84](https://github.com/SeraphaLab/Framework/commit/bc19e842d11870af37645e2de7e88d19b3a2fb63))
+
 ## [1.2.15](https://github.com/SeraphaLab/Framework/compare/1.2.14...1.2.15) (2026-09-29)
 
 
